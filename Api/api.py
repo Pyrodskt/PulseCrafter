@@ -1,14 +1,22 @@
 # api.py
 # Une API FastAPI pour gérer une bibliothèque musicale avec une structure hiérarchique.
 
+import sys
+import os
+
+# Ajoute la racine du projet au PYTHONPATH pour permettre les imports inter-modules
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+
 from typing import List, Optional
 import uvicorn
 from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session, joinedload
 from pydantic import BaseModel, ConfigDict, Field
 
 # Importation des modèles et de la configuration de la base de données
-from database_models import (
+from DB.database_models import (
     Base,
     engine,
     SessionLocal,
@@ -19,6 +27,31 @@ from database_models import (
     TypeDeBasse as TypeDeBasseDB,
     Group as GroupDB,
 )
+
+# ==============================================================================
+# Application et Endpoints API
+# ==============================================================================
+
+app = FastAPI(
+    title="PulseCrafter API",
+    description="API pour gérer et explorer une bibliothèque musicale hiérarchique.",
+    version="2.0.0",
+)
+
+# --- Configuration CORS ---
+origins = [
+    "http://localhost:5000",
+    "http://127.0.0.1:5000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 # ==============================================================================
 # Modèles Pydantic pour l'API
@@ -64,6 +97,9 @@ class Group(BaseModel):
     type: str
     parent_id: Optional[int] = None
     model_config = ConfigDict(from_attributes=True)
+
+class GroupTree(Group):
+    children: List['GroupTree'] = []
 
 class GroupDetail(Group):
     children: List['GroupDetail'] = []
@@ -111,7 +147,29 @@ def get_musics(db: Session, skip: int = 0, limit: int = 100) -> List[MusiqueDB]:
 def get_groups(db: Session, parent_id: Optional[int] = None) -> List[GroupDB]:
     """Récupère les groupes, soit à la racine (parent_id=None), soit les enfants d'un groupe."""
     return db.query(GroupDB).filter(GroupDB.parent_id == parent_id).all()
+
+def get_all_groups(db: Session) -> List[GroupDB]:
+    """Récupère tous les groupes de la base de données."""
+    return db.query(GroupDB).order_by(GroupDB.id).all()
     
+def get_groups_as_tree(db: Session) -> List[GroupDB]:
+    """Récupère tous les groupes et les organise en une arborescence."""
+    all_groups = db.query(GroupDB).options(joinedload(GroupDB.children)).all()
+    map = {g.id: g for g in all_groups}
+    roots = []
+    for group in all_groups:
+        if group.parent_id:
+            parent = map.get(group.parent_id)
+            if parent:
+                # This check avoids adding a child twice if it's already loaded by the relationship
+                if group not in parent.children:
+                    parent.children.append(group)
+            else:
+                roots.append(group)
+        else:
+            roots.append(group)
+    return roots
+
 def get_group_details(db: Session, group_id: int) -> Optional[GroupDB]:
     """Récupère un groupe avec ses enfants et musiques."""
     return (
@@ -131,11 +189,7 @@ def get_group_details(db: Session, group_id: int) -> Optional[GroupDB]:
 # Application et Endpoints API
 # ==============================================================================
 
-app = FastAPI(
-    title="PulseCrafter API",
-    description="API pour gérer et explorer une bibliothèque musicale hiérarchique.",
-    version="2.0.0",
-)
+
 
 @app.on_event("startup")
 def on_startup():
@@ -163,6 +217,16 @@ def read_groups_endpoint(parent_id: Optional[int] = None, db: Session = Depends(
     Par défaut (sans parent_id), liste les groupes racines (les genres).
     """
     return get_groups(db, parent_id=parent_id)
+
+@app.get("/groups/all", response_model=List[Group], tags=["Groupes"])
+def read_all_groups_endpoint(db: Session = Depends(get_db)):
+    """Liste tous les groupes de la base de données en une seule fois (liste à plat)."""
+    return get_all_groups(db)
+
+@app.get("/groups/tree", response_model=List[GroupTree], tags=["Groupes"])
+def read_groups_tree_endpoint(db: Session = Depends(get_db)):
+    """Liste tous les groupes sous forme d'arborescence hiérarchique."""
+    return get_groups_as_tree(db)
 
 @app.get("/groups/{group_id}", response_model=GroupDetail, tags=["Groupes"])
 def read_group_details_endpoint(group_id: int, db: Session = Depends(get_db)):

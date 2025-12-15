@@ -8,3 +8,4 @@ uvicorn[standard]
 sqlalchemy
 python-multipart
 scipy
+flask

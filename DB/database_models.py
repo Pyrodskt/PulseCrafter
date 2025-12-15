@@ -1,6 +1,7 @@
 # database_models.py
 # Fichier central pour les modèles de base de données SQLAlchemy de PulseCrafter.
 
+import os
 from sqlalchemy import (
     create_engine,
     Column,
@@ -17,7 +18,10 @@ from sqlalchemy.orm import sessionmaker, relationship, declarative_base
 # Configuration de la Base de Données
 # ==============================================================================
 
-DATABASE_URL = "sqlite:///./music_library.db"
+# Construit le chemin absolu vers la base de données pour éviter les problèmes de CWD
+db_dir = os.path.dirname(os.path.abspath(__file__))
+DATABASE_URL = f"sqlite:///{os.path.join(db_dir, 'music_library.db')}"
+
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()

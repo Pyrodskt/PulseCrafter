@@ -1,4 +1,5 @@
-musics/**
+core/musics/**
+core/PulseCrafter_Playlists/
 venv/**
 PulseCrafter/venv/**
 __pycache__/**

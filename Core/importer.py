@@ -1,15 +1,19 @@
 # importer.py
 # Script pour importer les données de music_data.json et grouped_music.json
 # dans une base de données SQLite normalisée et hiérarchique.
+import sys
+import os
+
+# Ajoute la racine du projet au PYTHONPATH pour permettre les imports inter-modules
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import json
 import re
 from tqdm import tqdm
 from sqlalchemy.orm import Session
-import os
 
 # Importation des modèles et de la configuration de la base de données
-from database_models import (
+from DB.database_models import (
     Base,
     engine,
     SessionLocal,
@@ -126,8 +130,8 @@ def importer_groupes_hierarchiques(session: Session, fichier_json='grouped_music
                 type=level_type,
                 parent_id=parent_id
             )
-            # Le commit ici est nécessaire pour que l'ID soit généré pour les enfants
-            session.commit()
+            # Flush pour que l'ID soit généré pour les enfants sans commiter la transaction
+            session.flush()
 
             if isinstance(children, list):
                 for music_filename in children:
@@ -151,8 +155,9 @@ def importer_groupes_hierarchiques(session: Session, fichier_json='grouped_music
 
     with tqdm(total=len(data), desc="Création des groupes") as pbar:
         for genre_name, bass_types in data.items():
+            print(f"Processing genre: '{genre_name}'") # DEBUG
             genre_group = _get_or_create_batch(session, group_cache, Group, nom=genre_name, type='genre', parent_id=None)
-            session.commit() # Commit pour s'assurer que le groupe racine a un ID
+            session.flush() # Flush pour s'assurer que le groupe racine a un ID
             process_node(bass_types, genre_group, 'bass_type')
             pbar.update(1)
 
@@ -163,10 +168,13 @@ def importer_groupes_hierarchiques(session: Session, fichier_json='grouped_music
 
 if __name__ == "__main__":
     print("Démarrage du script d'importation complet...")
+
+    # Construit le chemin vers la DB relative au script pour pouvoir le lancer de n'importe où
+    db_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'DB', 'music_library.db'))
     
-    if os.path.exists("music_library.db"):
-        os.remove("music_library.db")
-        print("Ancienne base de données supprimée pour une reconstruction propre.")
+    if os.path.exists(db_path):
+        os.remove(db_path)
+        print(f"Ancienne base de données '{db_path}' supprimée pour une reconstruction propre.")
 
     print("Création de toutes les tables...")
     Base.metadata.create_all(bind=engine)
@@ -174,9 +182,14 @@ if __name__ == "__main__":
     
     db = SessionLocal()
     
+    # Assure que les fichiers JSON sont trouvés relativement au script
+    core_dir = os.path.dirname(__file__)
+    music_data_path = os.path.join(core_dir, 'music_data.json')
+    grouped_music_path = os.path.join(core_dir, 'grouped_music.json')
+
     try:
-        importer_donnees_de_base(db)
-        importer_groupes_hierarchiques(db)
+        importer_donnees_de_base(db, fichier_json=music_data_path)
+        importer_groupes_hierarchiques(db, fichier_json=grouped_music_path)
     finally:
         db.close()
 
