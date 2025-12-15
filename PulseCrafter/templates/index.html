@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PulseCrafter</title>
+</head>
+<body>
+    <h1>Welcome to PulseCrafter!</h1>
+    <p>Your future music listing website.</p>
+
+    <h2>Sample Music List</h2>
+    <ul>
+        {% for music in music_list %}
+            <li>{{ music.title }} by {{ music.artist }} (Album: {{ music.album }})</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

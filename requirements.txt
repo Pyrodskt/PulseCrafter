@@ -1,0 +1,10 @@
+librosa
+mutagen
+numpy
+tqdm
+scdl
+fastapi
+uvicorn[standard]
+sqlalchemy
+python-multipart
+scipy

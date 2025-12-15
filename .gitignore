@@ -1,0 +1,5 @@
+musics/**
+venv/**
+PulseCrafter/venv/**
+__pycache__/**
+venv/Lib/site-packages/llvmlite/binding/llvmlite.dll
