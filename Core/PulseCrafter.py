@@ -235,7 +235,7 @@ class MusicGrouper:
                 if temp_bpm_group: bpm_groups_list.append(temp_bpm_group)
 
             bpm_groups_dict = {
-                f"Groupe de Clés {cluster_count}": [t['file'] for t in g]
+                f"Groupe de BPM {i+1}": [t['file'] for t in g]
                 for i, g in enumerate(bpm_groups_list) if g
             }
             if bpm_groups_dict:

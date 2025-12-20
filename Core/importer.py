@@ -30,7 +30,12 @@ def _get_or_create_batch(session: Session, cache: dict, model, **kwargs):
     Récupère une instance depuis le cache ou la DB. Si elle n'existe nulle part,
     la crée et l'ajoute à la session (sans commit).
     """
-    cache_key = f"{model.__name__}-{kwargs['nom']}"
+    # Clé de cache spécifique pour le modèle Group pour éviter les collisions
+    if model.__name__ == 'Group':
+        cache_key = f"Group-{kwargs['nom']}-{kwargs.get('type')}-{kwargs.get('parent_id')}"
+    else:
+        cache_key = f"{model.__name__}-{kwargs['nom']}"
+
     if cache_key in cache:
         return cache[cache_key]
 

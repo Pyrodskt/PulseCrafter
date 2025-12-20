@@ -1,42 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PulseCrafter - Groupes de Musiques</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Custom scrollbar for better aesthetics */
+        body { background-color: #111827; }
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #1f2937; }
         ::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #6b7280; }
 
-        .tree-container ul { padding-left: 1.5rem; }
-        .tree-container li { margin-top: 0.5rem; }
-        .tree-node {
-            display: flex;
-            align-items: center;
-            padding: 0.5rem;
-            border-radius: 0.5rem;
-            transition: background-color 0.2s;
-        }
-        .tree-node:hover { background-color: #374151; }
-        .tree-node .highlight { background-color: #fbbf24; color: #1f2937; border-radius: 0.2rem; padding: 0.1rem; }
-        .arrow {
-            cursor: pointer;
-            user-select: none;
-            margin-right: 0.5rem;
-            transition: transform 0.2s;
-            width: 1rem;
-            height: 1rem;
-        }
+        .tree ul { padding-left: 1.5rem; border-left: 1px solid #374151; }
+        .tree li { margin-top: 0.5rem; }
+        
+        .node-header { display: flex; align-items: center; padding: 0.5rem; border-radius: 0.5rem; transition: background-color 0.2s; cursor: pointer; }
+        .node-header:hover { background-color: #374151; }
+        .arrow { margin-right: 0.5rem; transition: transform 0.2s; width: 1rem; height: 1rem; flex-shrink: 0; }
         .arrow.collapsed { transform: rotate(-90deg); }
-        .icon { margin-right: 0.5rem; color: #9ca3af; }
+        .icon { margin-right: 0.5rem; color: #9ca3af; flex-shrink: 0; }
+        .node-content { display: none; padding-left: 1.5rem; }
+        .invisible { visibility: hidden; }
+        
+        .music-item { display: flex; align-items: center; padding: 0.5rem; margin-top: 0.25rem; border-radius: 0.375rem; font-size: 0.875rem; color: #d1d5db; }
+        .music-item .icon { color: #6b7280; }
+        .music-item-details { display: flex; justify-content: space-between; width: 100%; align-items: center; }
+        .music-item-details .artist { color: #9ca3af; margin-left: 1rem; }
+        .music-item-details .tags { display: flex; gap: 0.5rem; }
+        .music-item-details .tag { background-color: #374151; padding: 0.1rem 0.5rem; border-radius: 9999px; font-size: 0.75rem; }
     </style>
 </head>
-<body class="bg-gray-900 text-gray-100 font-sans antialiased">
+<body class="text-gray-100 font-sans antialiased">
     <div class="container mx-auto p-4 md:p-8">
         <nav class="bg-gray-800 p-4 rounded-lg mb-8 flex justify-center space-x-4">
             <a href="/" class="text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">Musiques</a>
@@ -45,166 +40,113 @@
 
         <h1 class="text-4xl font-extrabold text-white mb-8 text-center">Explorateur de Groupes</h1>
 
+        <!-- Section des Filtres -->
+        <div class="bg-gray-700 p-4 rounded-lg mb-8">
+            <form method="GET" action="/groups" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 items-end">
+                <!-- Filtre Genre -->
+                <div>
+                    <label for="genre" class="block mb-2 text-sm font-medium text-gray-300">Genre</label>
+                    <select id="genre" name="genre" class="bg-gray-800 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                        <option value="">Tous</option>
+                        {% for genre in all_genres %}
+                            <option value="{{ genre }}" {% if filters.genre == genre %}selected{% endif %}>{{ genre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <!-- Filtre Clé Musicale -->
+                <div>
+                    <label for="key" class="block mb-2 text-sm font-medium text-gray-300">Clé Musicale</label>
+                    <select id="key" name="key" class="bg-gray-800 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                        <option value="">Toutes</option>
+                        {% for key in all_keys %}
+                            <option value="{{ key }}" {% if filters.key == key %}selected{% endif %}>{{ key }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <!-- Filtre BPM -->
+                <div class="md:col-span-1 lg:col-span-2 flex gap-4">
+                    <div>
+                        <label for="bpm_min" class="block mb-2 text-sm font-medium text-gray-300">BPM Min</label>
+                        <input type="number" name="bpm_min" id="bpm_min" value="{{ filters.bpm_min or '' }}" placeholder="ex: 120" class="bg-gray-800 border border-gray-600 text-white text-sm rounded-lg block w-full p-2.5">
+                    </div>
+                    <div>
+                        <label for="bpm_max" class="block mb-2 text-sm font-medium text-gray-300">BPM Max</label>
+                        <input type="number" name="bpm_max" id="bpm_max" value="{{ filters.bpm_max or '' }}" placeholder="ex: 140" class="bg-gray-800 border border-gray-600 text-white text-sm rounded-lg block w-full p-2.5">
+                    </div>
+                </div>
+                <!-- Boutons -->
+                <div class="flex space-x-2">
+                    <button type="submit" class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Filtrer</button>
+                    <a href="/groups" class="w-full text-white bg-gray-600 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">Reset</a>
+                </div>
+            </form>
+        </div>
+
+
         <div class="bg-gray-800 shadow-lg rounded-lg overflow-hidden">
-            <!-- Search Bar -->
-            <div class="p-4 bg-gray-700 border-b border-gray-600">
-                <input type="text" id="search-filter" placeholder="Rechercher un groupe..." class="bg-gray-800 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-            </div>
-            
-            <!-- Tree View Container -->
-            <div id="tree-container" class="p-4 tree-container max-h-[70vh] overflow-y-auto">
-                <div class="text-center text-gray-400">Chargement de l'arborescence...</div>
+            <div id="tree-container" class="p-4 tree max-h-[70vh] overflow-y-auto">
+                {% if groups %}
+                    <ul>
+                        {% macro render_node(node) %}
+                            <li>
+                                <div class="node-header" onclick="toggleNode(this)">
+                                    <span class="arrow {% if node.children or node.musiques %}collapsed{% else %}invisible{% endif %}">▶</span>
+                                    <span class="icon">
+                                        {% if node.type == 'genre' %}<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                                        {% elif node.type == 'bass_type' %}<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.636 5.636a9 9 0 0112.728 0M18.364 18.364A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path></svg>
+                                        {% else %}<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
+                                        {% endif %}
+                                    </span>
+                                    <span class="node-name font-semibold">{{ node.nom }}</span>
+                                </div>
+                                <div class="node-content">
+                                    {% if node.musiques %}
+                                        <ul>
+                                            {% for music in node.musiques %}
+                                                <li class="music-item">
+                                                    <span class="icon"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2z"></path></svg></span>
+                                                    <div class="music-item-details">
+                                                        <span>{{ music.nom_fichier }} - <span class="artist">{{ music.artiste.nom }}</span></span>
+                                                        <span class="tags">
+                                                            <span class="tag">{{ music.bpm }} BPM</span>
+                                                            <span class="tag">{{ music.cle_musicale.nom }}</span>
+                                                        </span>
+                                                    </div>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% endif %}
+                                    {% if node.children %}
+                                        <ul>
+                                            {% for child in node.children %}
+                                                {{ render_node(child) }}
+                                            {% endfor %}
+                                        </ul>
+                                    {% endif %}
+                                </div>
+                            </li>
+                        {% endmacro %}
+                        {% for group in groups %}
+                            {{ render_node(group) }}
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <div class="text-center text-gray-400 p-8">Aucun résultat trouvé pour les filtres actifs.</div>
+                {% endif %}
             </div>
         </div>
     </div>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const treeContainer = document.getElementById('tree-container');
-        const searchInput = document.getElementById('search-filter');
-        let allGroups = [];
-
-        function buildTree(groups) {
-            const map = new Map(groups.map(g => [g.id, { ...g, children: [] }]));
-            const roots = [];
-            for (const group of map.values()) {
-                if (group.parent_id) {
-                    const parent = map.get(group.parent_id);
-                    if (parent) {
-                        parent.children.push(group);
-                    } else {
-                        roots.push(group); // Orphaned, treat as root
-                    }
-                } else {
-                    roots.push(group);
-                }
-            }
-            return roots;
+    function toggleNode(headerElement) {
+        const arrow = headerElement.querySelector('.arrow');
+        const content = headerElement.nextElementSibling;
+        
+        if (arrow && !arrow.classList.contains('invisible')) {
+            arrow.classList.toggle('collapsed');
+            content.style.display = content.style.display === 'none' || content.style.display === '' ? 'block' : 'none';
         }
-
-        function renderTreeNode(node) {
-            const hasChildren = node.children.length > 0;
-            const childrenHtml = hasChildren ? `<ul class="hidden">${node.children.map(renderTreeNode).join('')}</ul>` : '';
-            
-            // Simple folder/file icon based on children
-            const icon = hasChildren 
-                ? `<svg class="icon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>`
-                : `<svg class="icon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>`;
-
-            return `
-                <li data-id="${node.id}" data-name="${node.nom}">
-                    <div class="tree-node">
-                        <span class="arrow ${hasChildren ? 'collapsed' : 'invisible'}">${hasChildren ? '▶' : ''}</span>
-                        ${icon}
-                        <span class="node-name">${node.nom}</span>
-                    </div>
-                    ${childrenHtml}
-                </li>
-            `;
-        }
-
-        function filterTree() {
-            const query = searchInput.value.toLowerCase();
-            if (!query) {
-                // Reset tree: collapse all, remove highlights, show all
-                treeContainer.querySelectorAll('li').forEach(li => {
-                    li.style.display = '';
-                    li.querySelector('.node-name').innerHTML = li.dataset.name;
-                    const ul = li.querySelector('ul');
-                    if (ul) ul.classList.add('hidden');
-                    const arrow = li.querySelector('.arrow');
-                    if (arrow) arrow.classList.add('collapsed');
-                });
-                return;
-            }
-
-            const allNodes = Array.from(treeContainer.querySelectorAll('li'));
-            let matchedIds = new Set();
-
-            // Find nodes that match the query
-            allNodes.forEach(li => {
-                const nodeName = li.dataset.name.toLowerCase();
-                if (nodeName.includes(query)) {
-                    // Highlight match
-                    const originalName = li.dataset.name;
-                    const regex = new RegExp(query, 'gi');
-                    const highlightedName = originalName.replace(regex, match => `<span class="highlight">${match}</span>`);
-                    li.querySelector('.node-name').innerHTML = highlightedName;
-                    
-                    // Mark this node and all its parents as visible
-                    matchedIds.add(li.dataset.id);
-                    let parent = li.parentElement.closest('li');
-                    while (parent) {
-                        matchedIds.add(parent.dataset.id);
-                        parent = parent.parentElement.closest('li');
-                    }
-                } else {
-                     li.querySelector('.node-name').innerHTML = li.dataset.name;
-                }
-            });
-
-            // Show/hide nodes based on matches
-            allNodes.forEach(li => {
-                if (matchedIds.has(li.dataset.id)) {
-                    li.style.display = '';
-                    // Expand parents of matched nodes
-                    const ul = li.querySelector('ul');
-                    if (ul) {
-                         const hasVisibleChild = Array.from(ul.querySelectorAll('li')).some(childLi => matchedIds.has(childLi.dataset.id));
-                         if(hasVisibleChild) {
-                             ul.classList.remove('hidden');
-                             const arrow = li.querySelector('.arrow');
-                             if(arrow) arrow.classList.remove('collapsed');
-                         }
-                    }
-                } else {
-                    li.style.display = 'none';
-                }
-            });
-        }
-
-        async function initializeTree() {
-            try {
-                const response = await fetch('http://localhost:8000/groups/all');
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                
-                allGroups = await response.json();
-                const treeData = buildTree(allGroups);
-                
-                if(treeData.length === 0) {
-                    treeContainer.innerHTML = `<div class="text-center text-gray-400">Aucun groupe trouvé.</div>`;
-                    return;
-                }
-                
-                treeContainer.innerHTML = `<ul>${treeData.map(renderTreeNode).join('')}</ul>`;
-
-                treeContainer.addEventListener('click', e => {
-                    // Find the closest 'tree-node' element to where the user clicked
-                    const treeNode = e.target.closest('.tree-node');
-                    if (!treeNode) return; // Exit if the click was not on a node
-
-                    // From the node, find the parent li and the elements to toggle
-                    const li = treeNode.parentElement;
-                    const arrow = treeNode.querySelector('.arrow');
-                    const childrenUl = li.querySelector('ul');
-
-                    // Only proceed if there is an arrow to click and a list to toggle
-                    if (arrow && !arrow.classList.contains('invisible') && childrenUl) {
-                        arrow.classList.toggle('collapsed');
-                        childrenUl.classList.toggle('hidden');
-                    }
-                });
-
-                searchInput.addEventListener('keyup', filterTree);
-
-            } catch (error) {
-                console.error('Erreur:', error);
-                treeContainer.innerHTML = `<div class="text-center text-red-400">Erreur: ${error.message}</div>`;
-            }
-        }
-
-        initializeTree();
-    });
+    }
     </script>
 </body>
 </html>
