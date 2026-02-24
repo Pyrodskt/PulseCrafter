@@ -4,6 +4,7 @@
             "Groupe de Clés 1": {
                 "Groupe de BPM 1": [
                     "002. Schak - Inferno (feat. Scorccio).mp3",
+                    "100. BENNETT - Vois sur ton chemin (Extended Techno Mix).mp3",
                     "12. Lilly Palmer - New Generation (The Official Nature One Anthem 2024).mp3",
                     "37. Sacha Harland - Shake It.mp3"
                 ],
@@ -11,7 +12,7 @@
                     "022. Marnik - Boyz In Paris.mp3",
                     "040. DURDENHAUER - Praise The Lord (Da Shine) (Durdenhauer Edit) [feat. Skepta].mp3",
                     "051. Bodybangers - Black Stripe Yellow Paint.mp3",
-                    "153. JustLF - Ingrid.mp3",
+                    "151. JustLF - Ingrid.mp3",
                     "182. TNT - Cornflakes.mp3"
                 ]
             },
@@ -23,11 +24,11 @@
             },
             "Groupe de Clés 3": {
                 "Groupe de BPM 1": [
-                    "096. LIZOT - This Is The Life.mp3"
+                    "094. LIZOT - This Is The Life.mp3"
                 ],
                 "Groupe de BPM 2": [
                     "010. Yellow Claw - CRUSH.mp3",
-                    "176. EURO 93 - Mika - Relax, Take It Easy (EURO 93 & PACCU Remix).mp3"
+                    "173. EURO 93 - Mika - Relax, Take It Easy (EURO 93 & PACCU Remix).mp3"
                 ]
             },
             "Groupe de Clés 4": {
@@ -39,13 +40,12 @@
             },
             "Groupe de Clés 5": {
                 "Groupe de BPM 1": [
-                    "082. Disturbed - The Sound of Silence (CYRIL Remix).mp3",
-                    "100. BENNETT - Vois sur ton chemin (Techno Mix).mp3"
+                    "082. Disturbed - The Sound of Silence (CYRIL Remix).mp3"
                 ]
             },
             "Groupe de Clés 6": {
                 "Groupe de BPM 1": [
-                    "165. Jesse Bloch - TELEPHONE.mp3",
+                    "161. Jesse Bloch - TELEPHONE.mp3",
                     "093. NOTMYTYPE Official - Without You.mp3"
                 ]
             },
@@ -66,12 +66,228 @@
             }
         }
     },
+    "techno": {
+        "Basse Agressive": {
+            "Groupe de Clés 1": {
+                "Groupe de BPM 1": [
+                    "146. Tekila - Les cités d'or (remix TEKNO).mp3",
+                    "061. K4TRE_THCKORE - Les Ratz En Tawaaaaa.mp3",
+                    "20. GOONTER - GOONTER - BURN DA FLOOR [FREE DL].mp3"
+                ],
+                "Groupe de BPM 2": [
+                    "44. masami - GIVE ME.mp3",
+                    "093. cKc - J'IRAIS OU TU IRAS.mp3"
+                ],
+                "Groupe de BPM 3": [
+                    "38. mau5trap - Shay De Castro - Feel My Bass.mp3",
+                    "048. Gabriel Wittner - Maroon 5 - Moves Like Jagger (Valexus X Yamas Music X Gabriel Wittner Techno Remix).mp3",
+                    "143. Thepowerdonutscrew - Power donuts - Tech Des Ours.mp3"
+                ],
+                "Groupe de BPM 4": [
+                    "029. Nicolas Julian ⧸ - Mask Off.mp3",
+                    "070. Kimikos - Bourvil - Salade De Fruits (Kimikos Edit).mp3",
+                    "071. Le Bard - Le Bard ： Baby's On Fire ( FREE DL ).mp3",
+                    "132. DJ s3xtape - Smells Like Teen Spirit Remix.mp3",
+                    "140. ESKHA - ESKHA - La Vie C'est Fantastique (VIP EDIT) [FREE DL].mp3",
+                    "004. Caolan Kelly - Sexy Bitch (Techno Edition).mp3",
+                    "007. VĀLÅCĪD - RAYON DE SOLEIL (REMIX TRIBE).mp3",
+                    "013. PERCEVAL - MACHTOU PICHTOU (Feat. Vadrouilleur 2.0).mp3",
+                    "016. SIROLO - MASHLE S2 OPENING - Bling Bang Bang Born (Sirolo Techno Edit).mp3",
+                    "015. Whalien - A.N.I. X Niotech - Block Party [Free DL].mp3",
+                    "04. Ambra - Premiere ｜ Bellini - Samba De Janeiro (VAENT Bassline Edit).mp3",
+                    "103. OBSCUUR - EARGASM GOD - SOÑAR (FØSS HARD EDIT) [Free Download].mp3",
+                    "153. Hadrien 98 - DANS MA CABANE (Hadrien98 Remix).mp3",
+                    "162. BONKA - Voices In My Head x Freaks x Love Parade (ACINA & BONKA Mashup).mp3",
+                    "170. Lune Venus - ENVOLE MOI (REMIX Techno).mp3"
+                ],
+                "Groupe de BPM 5": [
+                    "042. Free-Calotek - Si quelqu'un touche aux caissons, j'lui démonte sa mère..mp3",
+                    "080. PERCEVAL - ÇA VA PÉTER !.mp3"
+                ]
+            },
+            "Groupe de Clés 2": {
+                "Groupe de BPM 1": [
+                    "164. GAB - Hariboumboum Clip - Les Kassos.mp3"
+                ],
+                "Groupe de BPM 2": [
+                    "187. Fabz - Fabz - Hextech [UNSR-298].mp3"
+                ],
+                "Groupe de BPM 3": [
+                    "01. Rawvage - [Distopik 002] Tenkū no shiro.mp3",
+                    "019. Le Bard - Remix Davy Jones ( Version Live ).mp3",
+                    "045. TTCK - TTCK - TEKNO LOGIC  ： Daft Punk remix.mp3",
+                    "073. TTCK - Joker ft Biomystic.mp3",
+                    "144. SYNTIX - Hey Baby Pitbull [Techno].mp3",
+                    "003. Le Bard - Le Bard ： Astérix et Obélix - Bonne Situation ( FREE DL ).mp3",
+                    "02. Dual Type - Totoro.mp3",
+                    "028. Majes - Majes - Macron Explosion (Techno Mix).mp3",
+                    "058. MËRO - My Head Is A Jungle ( Ben meredith ) MËRO EDIT.mp3",
+                    "08. Tausendnamen - DJ TALLBOY X BLAYDE - RAVE MACHINE.mp3",
+                    "092. Fuxx - The Weeknd - The Hills (Fuxx TECHNO remix).mp3",
+                    "099. HOLY PRIEST - Bennett - Vois sur ton chemin (Holy Priest Hard Techno Edit).mp3",
+                    "110. Majes - Majes - Violin Sonata N°13.mp3",
+                    "117. josh greenall - Walking on a dream x hangover techno (check my page).mp3"
+                ],
+                "Groupe de BPM 4": [
+                    "032. TXXNO - FREED FROM DESIRE HYPERTECHNO.mp3",
+                    "066. AMZK - Acid Mélancolique.mp3",
+                    "077. HOLY PRIEST - Coolio - Gangsta's Paradise (Holy Priest Hard Techno Edit).mp3",
+                    "086. Køya - Køya x CKC - Parádeisos (παράδεισος).mp3",
+                    "094. Techno Nation - Laren, Nico Moreno - You Make Me Horny.mp3",
+                    "122. Papri-K - PINOKIO - PAPRI-K.mp3",
+                    "171. GONZI - GONZI, TARS - So Naughty! (Extended Mix).mp3"
+                ]
+            },
+            "Groupe de Clés 3": {
+                "Groupe de BPM 1": [
+                    "101. matryxx ( S1pa’ta’tek ) - Hugo Tsr - Les Vieux De Mon Age Remix Tekno.mp3",
+                    "051. ☢ Jesutek ☢ - OFFSPRING REMIX - THE TEUFEURS AREN'T ALRIGHT.mp3",
+                    "052. Fabz - Fabz - Poussière.mp3"
+                ],
+                "Groupe de BPM 2": [
+                    "031. SONIK 23 - WHEEEE PT.3 [1k subs ＜3].mp3",
+                    "055. JKRS - JKRS & ECHO - Maneater.mp3",
+                    "056. Bjarxoo - Can't Stop Playing (Hypertechno).mp3",
+                    "131. ATMOS - E.T. - Katy Perry [Techno Remix By ATMOS].mp3"
+                ],
+                "Groupe de BPM 3": [
+                    "005. Taru - Migos - Bad and Boujee (Tarus Techno Remix).mp3",
+                    "008. Dual Type - Scooby-Doo !.mp3",
+                    "027. Sköne - i Told U (free download).mp3",
+                    "47. Nulleins Records - Bollmann - Rampage (Creeds Remix).mp3"
+                ],
+                "Groupe de BPM 4": [
+                    "066. PKM - IAM Petit Frère x Fasotek.mp3"
+                ]
+            },
+            "Groupe de Clés 4": {
+                "Groupe de BPM 1": [
+                    "034. Jackroll - Jackroll - Don’t Let Me Go [FREE DL].mp3"
+                ],
+                "Groupe de BPM 2": [
+                    "030. Matthew McElroy - TECHNO IN PARIS.mp3",
+                    "060. _Punkatek_ - La Danse De La 86 (Remix Hardcore).mp3",
+                    "024. Ästa - Like This.mp3",
+                    "081. TZAAR - La Roux - Bulletproof (TZAAR techno remix).mp3",
+                    "118. DURDENHAUER - A$AP ROCKY - Praise the Lord (DURDENHAUER Edit) Extended Mix.mp3",
+                    "167. Champi’Tek - soso maness petrouchka ft plk (remix ).mp3",
+                    "182. Perp - Chatroulette - Perp (Hard Trance remix).mp3",
+                    "53. ᴄᴀʀᴏᴜsᴇ - [CFREE036] JØR - Feel Alive.mp3"
+                ],
+                "Groupe de BPM 3": [
+                    "016. Nicolas Julian ⧸ - Jump Dance Move Bounce (VIP Mix).mp3",
+                    "058. Exobass Records - INSOMNIAK - GÉNÉRATION [EXO-95].mp3",
+                    "083. DJ TANI - Bubblegum B＊tch (Techno).mp3",
+                    "164. PERCEVAL - CORNEPOIL.mp3"
+                ]
+            },
+            "Groupe de Clés 5": {
+                "Groupe de BPM 1": [
+                    "046. INSOMNIAK - INSOMNIAK - ROAD TO THE TEUF ( Jesse Pinkman Jr. & Papri-K ).mp3",
+                    "55. Jay Lander - Angèle - Démons (ft. Damso)(Jay Lander TechnoRave Remix).mp3"
+                ],
+                "Groupe de BPM 2": [
+                    "044. RushLow - Cry For You (HYPERTECHNO).mp3",
+                    "089. Francois Call - Nothing Last Forever (feat. MaddaM).mp3",
+                    "091. Soave Tunes - ILYAA - Jerk It Out.mp3",
+                    "176. ELY 023 - ELY 023, Ephesis & Vernex - Dolce Camara (Booba Remix).mp3",
+                    "40. The Techno Community - Premiere ｜ Jaimy Lorenzo - Nobody [Free DL].mp3",
+                    "020. GEWOONRAVES - [FREE DL] LEAVE ME ALONE - DEXTASY (HARD TECHNO EDIT).mp3",
+                    "165. OMAKS - OMAKS - Make Your Transition [FREE DL].mp3",
+                    "172. Niotech - Niotech X  VAENT - Crazy Frog (On Acid) [Free DL].mp3"
+                ],
+                "Groupe de BPM 3": [
+                    "049. L.I.Ø - I Kissed A Girl (Katy Perry) -  TECHNO L.I.Ø.  remix.mp3"
+                ]
+            },
+            "Groupe de Clés 6": {
+                "Groupe de BPM 1": [
+                    "035. carlvtr - Pon De Replay  (AJAK remix).mp3"
+                ],
+                "Groupe de BPM 2": [
+                    "096. Sköne - Fruit des pluies, en couleur.mp3",
+                    "144. Manann - Poésie Zéro - TECHNOFLIC (Manann Remix) [FREE DOWNLOAD].mp3",
+                    "58. STRØWBERRY - EST CE QUE TU M'AIMES (HYPERTECHNO) - LUCKY DEMON, Mr Demon.mp3"
+                ]
+            },
+            "Groupe de Clés 7": {
+                "Groupe de BPM 1": [
+                    "075. AnFet - AnFet (ft. KRTRP) - Bambino OSS 117 Remix.mp3",
+                    "178. Krimshok - La Frequence (Krimshok)(Planetkick 05)(2005).mp3"
+                ],
+                "Groupe de BPM 2": [
+                    "123. The Techno Community - Premiere ｜ AREA ØNE - Groove Machine [Free DL].mp3",
+                    "174. AREA ØNE - Like this.mp3",
+                    "54. Dalwen - Elle ne t'aime pas - La Femme (Hardtechno Remix).mp3",
+                    "098. Gybz - Luiza - soleil bleu (Gybz Hardbounce Remix).mp3",
+                    "180. Jackroll - Jackroll - TR3NSMISSION [FREE DL].mp3"
+                ],
+                "Groupe de BPM 3": [
+                    "24. Drumcode - Massano - The Method - Drumcode - DC302.mp3",
+                    "188. iksern - Good Night Ojousama - Techno Mix.mp3"
+                ],
+                "Groupe de BPM 4": [
+                    "054. Gusted - Jet Plane (Gusted Remix) [OUT NOW ON SPOTIFY].mp3",
+                    "057. RoterKranich (NEW ACCOUNT： TXXNO) - SEXYBACK Techno.mp3",
+                    "043. PARKAH & DURZO - Iñigo Quintero - Si No Estás (ALE BASCIANO, PARKAH & DURZO Remix).mp3",
+                    "05. Fast Kick Delivery - Nelly Furtado - Promiscuous (FKD Remix).mp3",
+                    "060. Garde - JKRS - Cinema (Extended Mix).mp3",
+                    "065. JODA & MARROW - Only Girl  (Techno).mp3",
+                    "109. hoodblogz - BASSTON, STRØBE, Tazzy - YOUNG FOLKS (TECHNO).mp3",
+                    "122. ＰＡＲＫＡＨ - Iñigo Quintero - Si No Estás (ALE BASCIANO, PARKAH & DURZO Hypertechno Remix).mp3",
+                    "42. Le Bard - Le Bard ： Between The Worlds.mp3"
+                ],
+                "Groupe de BPM 5": [
+                    "054. INSOMNIAK - INSOMNIAK - ACABADABRA ( Jesse Pinkman Jr. & Papri-K ).mp3",
+                    "063. Alien303 - Les aventures de tchoupi.mp3",
+                    "069. INSOMNIAK - INSOMNIAK - LOI 420 ( Jesse Pinkman Jr. & Papri-K ).mp3",
+                    "117. SKINK - T A N E - TECHNO MOFO.mp3",
+                    "116. Le Bard - Le Bard - La Grange ( FREE DL ).mp3",
+                    "145. Domatus - Domatus - La Malediction.mp3",
+                    "170. HowsMax - Techno Maman.mp3"
+                ],
+                "Groupe de BPM 6": [
+                    "186. Fabz - Fabz - Catharsis.mp3"
+                ]
+            },
+            "Groupe de Clés 8": {
+                "Groupe de BPM 1": [
+                    "124. Whalien - No Tape -  Get The Man Gone [WHA023].mp3",
+                    "10. Azulo - Azulo - I Feel Alive [FREE DOWNLOAD].mp3"
+                ],
+                "Groupe de BPM 2": [
+                    "06. HACKETT - HACKETT - Pop and Lock.mp3",
+                    "101. Le Klown - LE KLOWN - C'EST LA VOISINE.mp3",
+                    "50. KTK RECORDS - SIKOTI - Bang Bang Bang.mp3"
+                ]
+            },
+            "Groupe de Clés 9": {
+                "Groupe de BPM 1": [
+                    "38. YuB - Daddy Yankee - Gasolina (YuB Techno RMX).mp3"
+                ],
+                "Groupe de BPM 2": [
+                    "066. Sam Red - Lil Uzi Vert - XO To Your Life (SamRed Techno Edit).mp3"
+                ]
+            },
+            "Groupe de Clés 10": {
+                "Groupe de BPM 1": [
+                    "081. PERCEVAL - ATTENTION LES CHAISES.mp3"
+                ],
+                "Groupe de BPM 2": [
+                    "112. ZAPRAVKA - Молодой.mp3",
+                    "120. Viol3nce - 💡🔋⚡️ Viol3nce - Couper Le Courant ⚡️🔋💡.mp3",
+                    "173. ORGANÏK - MaddaM - LETSGO (Rave Edit).mp3",
+                    "59. HOLY PRIEST - elMefti & Holy Priest - Brain Scramble.mp3"
+                ]
+            }
+        }
+    },
     "Unknown": {
         "Basse Agressive": {
             "Groupe de Clés 1": {
                 "Groupe de BPM 1": [
-                    "080. El Loco - TEKALAKON - MA PLANTATION.mp3",
-                    "004. VERNEX - VERNEX & EPHESIS - LA PETEE.mp3"
+                    "079. El Loco - TEKALAKON - MA PLANTATION.mp3",
+                    "003. VERNEX - VERNEX & EPHESIS - LA PETEE.mp3"
                 ],
                 "Groupe de BPM 2": [
                     "26. Steve Aoki - The Bloody Beetroots - Warp 1.9 ft. Steve Aoki.mp3"
@@ -114,9 +330,9 @@
                 ],
                 "Groupe de BPM 3": [
                     "019. ᴄᴀʀᴏᴜsᴇ - SIKOTI - All The Way (DXPE Remix) [CRS010].mp3",
-                    "026. GENETIK LBR - Genetik LBR - Petite Marie [Acid-Tekno Melodic].mp3",
+                    "025. GENETIK LBR - Genetik LBR - Petite Marie [Acid-Tekno Melodic].mp3",
                     "169. TERRORIϟER - al-kan vodka et la bz hardstyle.mp3",
-                    "082. El Loco - TEKALAKON - TUNAK TUNAK TUN.mp3",
+                    "083. El Loco - TEKALAKON - TUNAK TUNAK TUN.mp3",
                     "143. BADMONDAY [LABEL] - Totally Bad Spies.mp3",
                     "47. Armin Hermann - My Love - Route 94 [Armin Hermann x Serafin Edit] - FREE DL.mp3"
                 ]
@@ -127,7 +343,7 @@
                     "078. HOTBOI2300 - FILOW - RASENSCHACH (HOTBOI2300 EDIT).mp3"
                 ],
                 "Groupe de BPM 2": [
-                    "122. pechA - SOMEBODY TO LOVE (TECHNO).mp3",
+                    "127. pechA - SOMEBODY TO LOVE (TECHNO).mp3",
                     "14. HugoBass303 - MEMORIES.mp3",
                     "22. Restricted - Restricted, Nik Sitz - Party People (feat. 89ers).mp3",
                     "27. Taapion - Blaame - J'vais En Rave.mp3",
@@ -167,214 +383,7 @@
             },
             "Groupe de Clés 9": {
                 "Groupe de BPM 1": [
-                    "147. R1 - françoisl'embrouille musique.mp3"
-                ]
-            }
-        }
-    },
-    "techno": {
-        "Basse Agressive": {
-            "Groupe de Clés 1": {
-                "Groupe de BPM 1": [
-                    "146. Tekila - Les cités d'or (remix TEKNO).mp3",
-                    "061. K4TRE_THCKORE - Les Ratz En Tawaaaaa.mp3",
-                    "20. GOONTER - GOONTER - BURN DA FLOOR [FREE DL].mp3"
-                ],
-                "Groupe de BPM 2": [
-                    "44. masami - GIVE ME.mp3",
-                    "094. cKc - J'IRAIS OU TU IRAS.mp3"
-                ],
-                "Groupe de BPM 3": [
-                    "38. mau5trap - Shay De Castro - Feel My Bass.mp3",
-                    "048. Gabriel Wittner - Maroon 5 - Moves Like Jagger (Valexus X Yamas Music X Gabriel Wittner Techno Remix).mp3",
-                    "143. Thepowerdonutscrew - Power donuts - Tech Des Ours.mp3"
-                ],
-                "Groupe de BPM 4": [
-                    "029. Nicolas Julian ⧸ - Mask Off.mp3",
-                    "070. Kimikos - Bourvil - Salade De Fruits (Kimikos Edit).mp3",
-                    "071. Le Bard - Le Bard ： Baby's On Fire ( FREE DL ).mp3",
-                    "131. DJ s3xtape - Smells Like Teen Spirit Remix.mp3",
-                    "140. ESKHA - ESKHA - La Vie C'est Fantastique (VIP EDIT) [FREE DL].mp3",
-                    "006. Caolan Kelly - Sexy Bitch (Techno Edition).mp3",
-                    "007. VĀLÅCĪD - RAYON DE SOLEIL (REMIX TRIBE).mp3",
-                    "013. PERCEVAL - MACHTOU PICHTOU (Feat. Vadrouilleur 2.0).mp3",
-                    "015. Whalien - A.N.I. X Niotech - Block Party [Free DL].mp3",
-                    "019. SIROLO - MASHLE S2 OPENING - Bling Bang Bang Born (Sirolo Techno Edit).mp3",
-                    "04. Ambra - Premiere ｜ Bellini - Samba De Janeiro (VAENT Bassline Edit).mp3",
-                    "103. OBSCUUR - EARGASM GOD - SOÑAR (FØSS HARD EDIT) [Free Download].mp3",
-                    "152. Hadrien 98 - DANS MA CABANE (Hadrien98 Remix).mp3",
-                    "162. BONKA - Voices In My Head x Freaks x Love Parade (ACINA & BONKA Mashup).mp3",
-                    "175. Lune Venus - ENVOLE MOI (REMIX Techno).mp3"
-                ],
-                "Groupe de BPM 5": [
-                    "042. Free-Calotek - Si quelqu'un touche aux caissons, j'lui démonte sa mère..mp3",
-                    "080. PERCEVAL - ÇA VA PÉTER !.mp3"
-                ]
-            },
-            "Groupe de Clés 2": {
-                "Groupe de BPM 1": [
-                    "098. matryxx ( S1pa’ta’tek ) - Hugo Tsr - Les Vieux De Mon Age Remix Tekno.mp3",
-                    "053. ☢ Jesutek ☢ - OFFSPRING REMIX - THE TEUFEURS AREN'T ALRIGHT.mp3",
-                    "054. Fabz - Fabz - Poussière.mp3"
-                ],
-                "Groupe de BPM 2": [
-                    "031. SONIK 23 - WHEEEE PT.3 [1k subs ＜3].mp3",
-                    "055. JKRS - JKRS & ECHO - Maneater.mp3",
-                    "056. Bjarxoo - Can't Stop Playing (Hypertechno).mp3",
-                    "129. ATMOS - E.T. - Katy Perry [Techno Remix By ATMOS].mp3"
-                ],
-                "Groupe de BPM 3": [
-                    "003. Taru - Migos - Bad and Boujee (Tarus Techno Remix).mp3",
-                    "008. Dual Type - Scooby-Doo !.mp3",
-                    "027. Sköne - i Told U (free download).mp3",
-                    "47. Nulleins Records - Bollmann - Rampage (Creeds Remix).mp3"
-                ],
-                "Groupe de BPM 4": [
-                    "065. PKM - IAM Petit Frère x Fasotek.mp3"
-                ]
-            },
-            "Groupe de Clés 3": {
-                "Groupe de BPM 1": [
-                    "164. GAB - Hariboumboum Clip - Les Kassos.mp3"
-                ],
-                "Groupe de BPM 2": [
-                    "010. Rawvage - [Distopik 002] Tenkū no shiro.mp3",
-                    "016. Le Bard - Remix Davy Jones ( Version Live ).mp3",
-                    "045. TTCK - TTCK - TEKNO LOGIC  ： Daft Punk remix.mp3",
-                    "073. TTCK - Joker ft Biomystic.mp3",
-                    "144. SYNTIX - Hey Baby Pitbull [Techno].mp3",
-                    "003. Le Bard - Le Bard ： Astérix et Obélix - Bonne Situation ( FREE DL ).mp3",
-                    "02. Dual Type - Totoro.mp3",
-                    "028. Majes - Majes - Macron Explosion (Techno Mix).mp3",
-                    "058. MËRO - My Head Is A Jungle ( Ben meredith ) MËRO EDIT.mp3",
-                    "08. Tausendnamen - DJ TALLBOY X BLAYDE - RAVE MACHINE.mp3",
-                    "092. Fuxx - The Weeknd - The Hills (Fuxx TECHNO remix).mp3",
-                    "110. Majes - Majes - Violin Sonata N°13.mp3",
-                    "113. josh greenall - Walking on a dream x hangover techno (check my page).mp3"
-                ],
-                "Groupe de BPM 3": [
-                    "032. TXXNO - FREED FROM DESIRE HYPERTECHNO.mp3",
-                    "066. AMZK - Acid Mélancolique.mp3",
-                    "077. HOLY PRIEST - Coolio - Gangsta's Paradise (Holy Priest Hard Techno Edit).mp3",
-                    "086. Køya - Køya x CKC - Parádeisos (παράδεισος).mp3",
-                    "094. Techno Nation - Laren, Nico Moreno - You Make Me Horny.mp3",
-                    "122. Papri-K - PINOKIO - PAPRI-K.mp3",
-                    "171. GONZI - GONZI, TARS - So Naughty! (Extended Mix).mp3"
-                ]
-            },
-            "Groupe de Clés 4": {
-                "Groupe de BPM 1": [
-                    "035. Jackroll - Jackroll - Don’t Let Me Go [FREE DL].mp3"
-                ],
-                "Groupe de BPM 2": [
-                    "030. Matthew McElroy - TECHNO IN PARIS.mp3",
-                    "060. _Punkatek_ - La Danse De La 86 (Remix Hardcore).mp3",
-                    "024. Ästa - Like This.mp3",
-                    "077. TZAAR - La Roux - Bulletproof (TZAAR techno remix).mp3",
-                    "168. Champi’Tek - soso maness petrouchka ft plk (remix ).mp3",
-                    "182. Perp - Chatroulette - Perp (Hard Trance remix).mp3",
-                    "53. ᴄᴀʀᴏᴜsᴇ - [CFREE036] JØR - Feel Alive.mp3"
-                ],
-                "Groupe de BPM 3": [
-                    "016. Nicolas Julian ⧸ - Jump Dance Move Bounce (VIP Mix).mp3",
-                    "059. Exobass Records - INSOMNIAK - GÉNÉRATION [EXO-95].mp3",
-                    "083. DJ TANI - Bubblegum B＊tch (Techno).mp3",
-                    "164. PERCEVAL - CORNEPOIL.mp3"
-                ]
-            },
-            "Groupe de Clés 5": {
-                "Groupe de BPM 1": [
-                    "046. INSOMNIAK - INSOMNIAK - ROAD TO THE TEUF ( Jesse Pinkman Jr. & Papri-K ).mp3",
-                    "55. Jay Lander - Angèle - Démons (ft. Damso)(Jay Lander TechnoRave Remix).mp3"
-                ],
-                "Groupe de BPM 2": [
-                    "044. RushLow - Cry For You (HYPERTECHNO).mp3",
-                    "089. Francois Call - Nothing Last Forever (feat. MaddaM).mp3",
-                    "091. Soave Tunes - ILYAA - Jerk It Out.mp3",
-                    "176. ELY 023 - ELY 023, Ephesis & Vernex - Dolce Camara (Booba Remix).mp3",
-                    "40. The Techno Community - Premiere ｜ Jaimy Lorenzo - Nobody [Free DL].mp3",
-                    "020. GEWOONRAVES - [FREE DL] LEAVE ME ALONE - DEXTASY (HARD TECHNO EDIT).mp3",
-                    "165. OMAKS - OMAKS - Make Your Transition [FREE DL].mp3",
-                    "172. Niotech - Niotech X  VAENT - Crazy Frog (On Acid) [Free DL].mp3"
-                ],
-                "Groupe de BPM 3": [
-                    "049. L.I.Ø - I Kissed A Girl (Katy Perry) -  TECHNO L.I.Ø.  remix.mp3"
-                ]
-            },
-            "Groupe de Clés 6": {
-                "Groupe de BPM 1": [
-                    "035. carlvtr - Pon De Replay  (AJAK remix).mp3"
-                ],
-                "Groupe de BPM 2": [
-                    "096. Sköne - Fruit des pluies, en couleur.mp3",
-                    "144. Manann - Poésie Zéro - TECHNOFLIC (Manann Remix) [FREE DOWNLOAD].mp3",
-                    "58. STRØWBERRY - EST CE QUE TU M'AIMES (HYPERTECHNO) - LUCKY DEMON, Mr Demon.mp3"
-                ]
-            },
-            "Groupe de Clés 7": {
-                "Groupe de BPM 1": [
-                    "075. AnFet - AnFet (ft. KRTRP) - Bambino OSS 117 Remix.mp3",
-                    "179. Krimshok - La Frequence (Krimshok)(Planetkick 05)(2005).mp3"
-                ],
-                "Groupe de BPM 2": [
-                    "123. The Techno Community - Premiere ｜ AREA ØNE - Groove Machine [Free DL].mp3",
-                    "174. AREA ØNE - Like this.mp3",
-                    "54. Dalwen - Elle ne t'aime pas - La Femme (Hardtechno Remix).mp3",
-                    "098. Gybz - Luiza - soleil bleu (Gybz Hardbounce Remix).mp3",
-                    "180. Jackroll - Jackroll - TR3NSMISSION [FREE DL].mp3"
-                ],
-                "Groupe de BPM 3": [
-                    "24. Drumcode - Massano - The Method - Drumcode - DC302.mp3",
-                    "190. iksern - Good Night Ojousama - Techno Mix.mp3"
-                ],
-                "Groupe de BPM 4": [
-                    "054. Gusted - Jet Plane (Gusted Remix) [OUT NOW ON SPOTIFY].mp3",
-                    "057. RoterKranich (NEW ACCOUNT： TXXNO) - SEXYBACK Techno.mp3",
-                    "043. PARKAH & DURZO - Iñigo Quintero - Si No Estás (ALE BASCIANO, PARKAH & DURZO Remix).mp3",
-                    "05. Fast Kick Delivery - Nelly Furtado - Promiscuous (FKD Remix).mp3",
-                    "060. Garde - JKRS - Cinema (Extended Mix).mp3",
-                    "065. JODA & MARROW - Only Girl  (Techno).mp3",
-                    "109. hoodblogz - BASSTON, STRØBE, Tazzy - YOUNG FOLKS (TECHNO).mp3",
-                    "42. Le Bard - Le Bard ： Between The Worlds.mp3"
-                ],
-                "Groupe de BPM 5": [
-                    "056. INSOMNIAK - INSOMNIAK - ACABADABRA ( Jesse Pinkman Jr. & Papri-K ).mp3",
-                    "063. Alien303 - Les aventures de tchoupi.mp3",
-                    "070. INSOMNIAK - INSOMNIAK - LOI 420 ( Jesse Pinkman Jr. & Papri-K ).mp3",
-                    "117. SKINK - T A N E - TECHNO MOFO.mp3",
-                    "116. Le Bard - Le Bard - La Grange ( FREE DL ).mp3",
-                    "145. Domatus - Domatus - La Malediction.mp3",
-                    "170. HowsMax - Techno Maman.mp3"
-                ]
-            },
-            "Groupe de Clés 8": {
-                "Groupe de BPM 1": [
-                    "124. Whalien - No Tape -  Get The Man Gone [WHA023].mp3",
-                    "10. Azulo - Azulo - I Feel Alive [FREE DOWNLOAD].mp3"
-                ],
-                "Groupe de BPM 2": [
-                    "06. HACKETT - HACKETT - Pop and Lock.mp3",
-                    "101. Le Klown - LE KLOWN - C'EST LA VOISINE.mp3",
-                    "50. KTK RECORDS - SIKOTI - Bang Bang Bang.mp3"
-                ]
-            },
-            "Groupe de Clés 9": {
-                "Groupe de BPM 1": [
-                    "38. YuB - Daddy Yankee - Gasolina (YuB Techno RMX).mp3"
-                ],
-                "Groupe de BPM 2": [
-                    "066. Sam Red - Lil Uzi Vert - XO To Your Life (SamRed Techno Edit).mp3"
-                ]
-            },
-            "Groupe de Clés 10": {
-                "Groupe de BPM 1": [
-                    "081. PERCEVAL - ATTENTION LES CHAISES.mp3"
-                ],
-                "Groupe de BPM 2": [
-                    "112. ZAPRAVKA - Молодой.mp3",
-                    "120. Viol3nce - 💡🔋⚡️ Viol3nce - Couper Le Courant ⚡️🔋💡.mp3",
-                    "173. ORGANÏK - MaddaM - LETSGO (Rave Edit).mp3",
-                    "59. HOLY PRIEST - elMefti & Holy Priest - Brain Scramble.mp3"
+                    "150. R1 - françoisl'embrouille musique.mp3"
                 ]
             }
         }
@@ -384,15 +393,6 @@
             "Groupe de Clés 1": {
                 "Groupe de BPM 1": [
                     "001. PUNYASO - PPAP Pen Pineapple Apple Pen (PUNYASO Remix).mp3"
-                ]
-            }
-        }
-    },
-    "spytribe": {
-        "Basse Agressive": {
-            "Groupe de Clés 1": {
-                "Groupe de BPM 1": [
-                    "005. Le Bard - Le Bard - Return To The Sources (FREE DL).mp3"
                 ]
             }
         }
@@ -424,7 +424,7 @@
             "Groupe de Clés 4": {
                 "Groupe de BPM 1": [
                     "157. NarkosticK - Narkostick ft. Lipsytek - Simbiosis Atom [UNSR-019].mp3",
-                    "166. 𝔢𝔩 𝔭𝔞𝔫𝔡𝔯𝔬𝔲𝔵 - Taïro - Bonne Weed (EL PANDROUX REMIX).mp3",
+                    "165. 𝔢𝔩 𝔭𝔞𝔫𝔡𝔯𝔬𝔲𝔵 - Taïro - Bonne Weed (EL PANDROUX REMIX).mp3",
                     "160. ☣AnarKoTeK☣ - Coule Ta Douille AnarKoTeK.mp3"
                 ]
             }
@@ -438,7 +438,7 @@
                     "026. eon - Serendipity [UNSR 261].mp3"
                 ],
                 "Groupe de BPM 2": [
-                    "020. Neun's Prod - La Tribu De Dana (Livetest Remix).mp3"
+                    "04. Neun's Prod - La Tribu De Dana (Livetest Remix).mp3"
                 ],
                 "Groupe de BPM 3": [
                     "064. .：Baluchon：. - TEKALAKON - LA JUMENT DE MICHO.mp3"
@@ -472,7 +472,7 @@
                     "064. Kodaman - Le ciel tout là-haut.mp3"
                 ],
                 "Groupe de BPM 3": [
-                    "066. .：Baluchon：. - TEKALAKON - STACH STACH.mp3"
+                    "065. .：Baluchon：. - TEKALAKON - STACH STACH.mp3"
                 ]
             },
             "Groupe de Clés 4": {
@@ -503,12 +503,12 @@
             },
             "Groupe de Clés 6": {
                 "Groupe de BPM 1": [
-                    "081. AyukaFR - TEKALAKON - SERVIETSKY.mp3",
+                    "082. AyukaFR - TEKALAKON - SERVIETSKY.mp3",
                     "032. DIRPIX - Extraction [PURE-066].mp3"
                 ],
                 "Groupe de BPM 2": [
-                    "036. ᕈ⳽ყᥴᖾooⱬ 🏴‍☠️ - Psychooz - Where Is My Mind.mp3",
-                    "076. L'USINATEK - Stupeflip - Tellement bon (Fabz Tekno Remix).mp3",
+                    "035. ᕈ⳽ყᥴᖾooⱬ 🏴‍☠️ - Psychooz - Where Is My Mind.mp3",
+                    "077. L'USINATEK - Stupeflip - Tellement bon (Fabz Tekno Remix).mp3",
                     "100. El Desperado - Luchador.mp3",
                     "109. EKINOKX - Mojito.mp3"
                 ]
@@ -541,7 +541,7 @@
                     "083. Neun's - Neun's & HanniBaSs - Le Bal Des Ombres.mp3"
                 ],
                 "Groupe de BPM 2": [
-                    "103. Neun's - Rave of the Mountain King [UNSR-295].mp3"
+                    "107. Neun's - Rave of the Mountain King [UNSR-295].mp3"
                 ]
             }
         }
@@ -555,20 +555,20 @@
             }
         }
     },
-    "progressive trance": {
-        "Basse Agressive": {
-            "Groupe de Clés 1": {
-                "Groupe de BPM 1": [
-                    "005. BELIK BOOM - Avada kadabra (FREE DOWNLOAD).mp3"
-                ]
-            }
-        }
-    },
     "flutecore": {
         "Basse Agressive": {
             "Groupe de Clés 1": {
                 "Groupe de BPM 1": [
-                    "009. Redkick - Enculade.gouv.mp3"
+                    "007. Redkick - Enculade.gouv.mp3"
+                ]
+            }
+        }
+    },
+    "spytribe": {
+        "Basse Agressive": {
+            "Groupe de Clés 1": {
+                "Groupe de BPM 1": [
+                    "005. Le Bard - Le Bard - Return To The Sources (FREE DL).mp3"
                 ]
             }
         }
@@ -583,30 +583,6 @@
             "Groupe de Clés 2": {
                 "Groupe de BPM 1": [
                     "43. INNERGATED - Premiere： AREA ØNE - Let The Bass Go.mp3"
-                ]
-            }
-        }
-    },
-    "tribecore": {
-        "Basse Agressive": {
-            "Groupe de Clés 1": {
-                "Groupe de BPM 1": [
-                    "009. Rabteu - Tribe System.mp3"
-                ]
-            },
-            "Groupe de Clés 2": {
-                "Groupe de BPM 1": [
-                    "058. TeKnicien - Spiderman FDP.mp3"
-                ]
-            },
-            "Groupe de Clés 3": {
-                "Groupe de BPM 1": [
-                    "074. NOTEKK - Stupeflip - Tellement Bon - Remix Chéper.mp3"
-                ]
-            },
-            "Groupe de Clés 4": {
-                "Groupe de BPM 1": [
-                    "081. TTCK - Ragnar - Qui Veut Être Roi !？ (Ttck Vikings Remix).mp3"
                 ]
             }
         }
@@ -628,21 +604,21 @@
             },
             "Groupe de Clés 2": {
                 "Groupe de BPM 1": [
-                    "039. Captain 303 - [ACIDTRIBE] Captain 303  - Rick And Acid Part III.mp3"
-                ],
-                "Groupe de BPM 2": [
-                    "127. sponderzaz - I FOLLOW (ELY OAKS X CH4YN REMIX).mp3",
-                    "36. Timmy Trumpet - Hey Ya.mp3"
+                    "045. JKRS - Low.mp3"
                 ]
             },
             "Groupe de Clés 3": {
                 "Groupe de BPM 1": [
-                    "045. JKRS - Low.mp3"
+                    "041. Captain 303 - [ACIDTRIBE] Captain 303  - Rick And Acid Part III.mp3"
+                ],
+                "Groupe de BPM 2": [
+                    "130. sponderzaz - I FOLLOW (ELY OAKS X CH4YN REMIX).mp3",
+                    "36. Timmy Trumpet - Hey Ya.mp3"
                 ]
             },
             "Groupe de Clés 4": {
                 "Groupe de BPM 1": [
-                    "102. Indila - Dernière danse (Techno Mix).mp3"
+                    "103. Indila - Dernière danse (Techno Mix).mp3"
                 ]
             },
             "Groupe de Clés 5": {
@@ -652,11 +628,35 @@
             }
         }
     },
-    "hardtek/tribecore": {
+    "progressive trance": {
         "Basse Agressive": {
             "Groupe de Clés 1": {
                 "Groupe de BPM 1": [
-                    "007. Sasio - Sasio - Hey Mortyyy (Original Mix) VINYL OUT !.mp3"
+                    "006. BELIK BOOM - Avada kadabra (FREE DOWNLOAD).mp3"
+                ]
+            }
+        }
+    },
+    "tribecore": {
+        "Basse Agressive": {
+            "Groupe de Clés 1": {
+                "Groupe de BPM 1": [
+                    "009. Rabteu - Tribe System.mp3"
+                ]
+            },
+            "Groupe de Clés 2": {
+                "Groupe de BPM 1": [
+                    "057. TeKnicien - Spiderman FDP.mp3"
+                ]
+            },
+            "Groupe de Clés 3": {
+                "Groupe de BPM 1": [
+                    "071. NOTEKK - Stupeflip - Tellement Bon - Remix Chéper.mp3"
+                ]
+            },
+            "Groupe de Clés 4": {
+                "Groupe de BPM 1": [
+                    "081. TTCK - Ragnar - Qui Veut Être Roi !？ (Ttck Vikings Remix).mp3"
                 ]
             }
         }
@@ -670,21 +670,11 @@
             }
         }
     },
-    "dance & electronic (dance/techno/disco)": {
+    "hardtek/tribecore": {
         "Basse Agressive": {
             "Groupe de Clés 1": {
                 "Groupe de BPM 1": [
-                    "013. Jaques Raupé - 3 Haselnüsse.mp3"
-                ]
-            },
-            "Groupe de Clés 2": {
-                "Groupe de BPM 1": [
-                    "101. Neptunica - Ella Elle L'a.mp3"
-                ]
-            },
-            "Groupe de Clés 3": {
-                "Groupe de BPM 1": [
-                    "159. Le Shuuk - Macarena.mp3"
+                    "009. Sasio - Sasio - Hey Mortyyy (Original Mix) VINYL OUT !.mp3"
                 ]
             }
         }
@@ -697,8 +687,8 @@
                 ],
                 "Groupe de BPM 2": [
                     "091. VERNEX - VERNEX & BASSRUNNER - GADGETO.mp3",
-                    "142. Skylleur - Skylleur - Paysan Breton.mp3",
-                    "014. Cevo - Monsoon - (Niklas Dee remix).mp3",
+                    "141. Skylleur - Skylleur - Paysan Breton.mp3",
+                    "012. Cevo - Monsoon - (Niklas Dee remix).mp3",
                     "087. tekknological - All I Want For Christmas Is You (Techno).mp3"
                 ]
             },
@@ -727,12 +717,11 @@
                 ],
                 "Groupe de BPM 2": [
                     "050. Narfos - Shanti Powa - Drunk & Naked (Narfos Remix).mp3",
-                    "183. MOONLGHT - Who's Your Daddy？! (Star Wars Imperial March Remix).mp3"
+                    "179. MOONLGHT - Who's Your Daddy？! (Star Wars Imperial March Remix).mp3"
                 ],
                 "Groupe de BPM 3": [
                     "034. antony - say it right (Techno).mp3",
-                    "085. Drickberg - Sido - Schlechtes Vorbild (Drickberg Bootleg).mp3",
-                    "167. BOOMASS - Trei Degete - Time Time (Hardstyle Remix).mp3"
+                    "085. Drickberg - Sido - Schlechtes Vorbild (Drickberg Bootleg).mp3"
                 ]
             },
             "Groupe de Clés 5": {
@@ -744,16 +733,16 @@
             },
             "Groupe de Clés 6": {
                 "Groupe de BPM 1": [
-                    "161. Bordje - Les Aristochats - Remix.mp3",
-                    "123. Aaron Maguire🇮🇪 - Macon - Beyonce Sweet Dreams X Techno.mp3"
-                ],
-                "Groupe de BPM 2": [
-                    "039. Venicious - Meduza, James Carter - Bad Memories (Venicious Remix).mp3"
+                    "038. DaPoule - LE - SANGLIER.mp3"
                 ]
             },
             "Groupe de Clés 7": {
                 "Groupe de BPM 1": [
-                    "041. DaPoule - LE - SANGLIER.mp3"
+                    "160. Bordje - Les Aristochats - Remix.mp3",
+                    "126. Aaron Maguire🇮🇪 - Macon - Beyonce Sweet Dreams X Techno.mp3"
+                ],
+                "Groupe de BPM 2": [
+                    "039. Venicious - Meduza, James Carter - Bad Memories (Venicious Remix).mp3"
                 ]
             },
             "Groupe de Clés 8": {
@@ -768,7 +757,7 @@
             },
             "Groupe de Clés 10": {
                 "Groupe de BPM 1": [
-                    "188. VERNEX - VERNEX - DESOLE  ＂Sexion D'assaut＂ (REMIX).mp3"
+                    "184. VERNEX - VERNEX - DESOLE  ＂Sexion D'assaut＂ (REMIX).mp3"
                 ]
             }
         },
@@ -776,6 +765,25 @@
             "Groupe de Clés 1": {
                 "Groupe de BPM 1": [
                     "57. BVRNOUT - Poison - Nothin' But A Good Time (BVRNOUT x MOONLGHT Remix).mp3"
+                ]
+            }
+        }
+    },
+    "dance & electronic (dance/techno/disco)": {
+        "Basse Agressive": {
+            "Groupe de Clés 1": {
+                "Groupe de BPM 1": [
+                    "013. Jaques Raupé - 3 Haselnüsse.mp3"
+                ]
+            },
+            "Groupe de Clés 2": {
+                "Groupe de BPM 1": [
+                    "098. Neptunica - Ella Elle L'a.mp3"
+                ]
+            },
+            "Groupe de Clés 3": {
+                "Groupe de BPM 1": [
+                    "154. Le Shuuk - Macarena.mp3"
                 ]
             }
         }
@@ -808,15 +816,6 @@
             }
         }
     },
-    "hardcore": {
-        "Basse Agressive": {
-            "Groupe de Clés 1": {
-                "Groupe de BPM 1": [
-                    "012. BADNIAK - C'est pas sorcier !.mp3"
-                ]
-            }
-        }
-    },
     "outre-acid tribe": {
         "Basse Agressive": {
             "Groupe de Clés 1": {
@@ -835,6 +834,15 @@
             }
         }
     },
+    "hardcore": {
+        "Basse Agressive": {
+            "Groupe de Clés 1": {
+                "Groupe de BPM 1": [
+                    "014. BADNIAK - C'est pas sorcier !.mp3"
+                ]
+            }
+        }
+    },
     "hard techno": {
         "Basse Agressive": {
             "Groupe de Clés 1": {
@@ -842,13 +850,13 @@
                     "29. Vortek's - Spice Up! - Soldiers [OMN-116].mp3"
                 ],
                 "Groupe de BPM 2": [
-                    "086. BEAUZ - My Humps (BEAUZ Hard Techno Remix).mp3",
+                    "084. BEAUZ - My Humps (BEAUZ Hard Techno Remix).mp3",
                     "018. BEAUZ - Bel Mercy (BEAUZ Hard Techno Remix) feat. Nokia.mp3"
                 ]
             },
             "Groupe de Clés 2": {
                 "Groupe de BPM 1": [
-                    "084. KX CHR - Nirvana - Smells Like Teen Spirit (KX CHR Hard Techno Edit) FREE DL EXTENDED + ORIGINAL PITCH.mp3",
+                    "086. KX CHR - Nirvana - Smells Like Teen Spirit (KX CHR Hard Techno Edit) FREE DL EXTENDED + ORIGINAL PITCH.mp3",
                     "11. Revised Records - Franky-B &  Kø：lab - Godspeed.mp3"
                 ]
             },
@@ -897,7 +905,7 @@
             },
             "Groupe de Clés 2": {
                 "Groupe de BPM 1": [
-                    "022. Ester - Vald - Promesse ｜ Espace Terminé Remix Psytrance.mp3"
+                    "020. Ester - Vald - Promesse ｜ Espace Terminé Remix Psytrance.mp3"
                 ],
                 "Groupe de BPM 2": [
                     "13. MACKS - MACKS - The Real Slim Shady (Hard Dance Edit) [FREE DOWNLOAD].mp3",
@@ -963,7 +971,7 @@
             },
             "Groupe de Clés 8": {
                 "Groupe de BPM 1": [
-                    "184. WI.SE - Maneater - Trance Edit (WI.SE).mp3"
+                    "187. WI.SE - Maneater - Trance Edit (WI.SE).mp3"
                 ],
                 "Groupe de BPM 2": [
                     "094. THRESHOLD - Supernova - THRESHOLD (FREE DL).mp3"
@@ -971,7 +979,7 @@
             },
             "Groupe de Clés 9": {
                 "Groupe de BPM 1": [
-                    "177. interspäti - Ferrand - Sexy And I Know It.mp3"
+                    "175. interspäti - Ferrand - Sexy And I Know It.mp3"
                 ],
                 "Groupe de BPM 2": [
                     "48. Hecki - Praise The Lord (HECKI TRANCE REMIX).mp3"
@@ -1020,15 +1028,6 @@
             }
         }
     },
-    "rave": {
-        "Basse Agressive": {
-            "Groupe de Clés 1": {
-                "Groupe de BPM 1": [
-                    "025. CosmosRecords - STIREX & TOXIC TWINS - SHINOBI [Free DL].mp3"
-                ]
-            }
-        }
-    },
     "acidcore": {
         "Basse Agressive": {
             "Groupe de Clés 1": {
@@ -1038,8 +1037,8 @@
                 "Groupe de BPM 2": [
                     "114. ADK_ziratox - Ma Libellule.mp3",
                     "136. Nerz - Nerz - Acid Frog (Crazy Frog remix)[Free Download].mp3",
-                    "025. Nerz - Nerz - Bique La Nac.mp3",
-                    "069. Quebird - Quebird Ft Algonik - Petite Musique De Nuit.mp3",
+                    "024. Nerz - Nerz - Bique La Nac.mp3",
+                    "070. Quebird - Quebird Ft Algonik - Petite Musique De Nuit.mp3",
                     "166. Artik - BandArtik - Fight Club (Banditik & Artik).mp3"
                 ]
             },
@@ -1048,7 +1047,7 @@
                     "030. Viruks - Along The Path - Viruks & Drymk.mp3"
                 ],
                 "Groupe de BPM 2": [
-                    "024. 𝐊𝐘𝐔𝐁𝐈𝐓𝐄𝐊 - KBTK - LES COPAINS.mp3",
+                    "026. 𝐊𝐘𝐔𝐁𝐈𝐓𝐄𝐊 - KBTK - LES COPAINS.mp3",
                     "060. CIPLATEK - GuM GuM.mp3",
                     "108. Galetek - Symbiosis [FREE DL].mp3",
                     "098. TeKotaK - Un Peu D'Acid Chez Les NDS.mp3"
@@ -1089,22 +1088,49 @@
             }
         }
     },
+    "rave": {
+        "Basse Agressive": {
+            "Groupe de Clés 1": {
+                "Groupe de BPM 1": [
+                    "025. CosmosRecords - STIREX & TOXIC TWINS - SHINOBI [Free DL].mp3"
+                ]
+            }
+        }
+    },
+    "nostalgic tekno": {
+        "Basse Agressive": {
+            "Groupe de Clés 1": {
+                "Groupe de BPM 1": [
+                    "022. Neun's - Manau - La Tribu De Dana (Neun's Remix).mp3"
+                ]
+            }
+        }
+    },
+    "neotrance": {
+        "Basse Agressive": {
+            "Groupe de Clés 1": {
+                "Groupe de BPM 1": [
+                    "025. NeoFX - Sabali (Amadou & Mariam Remix) [FREE DL].mp3"
+                ]
+            }
+        }
+    },
     "frenchcore": {
         "Basse Agressive": {
             "Groupe de Clés 1": {
                 "Groupe de BPM 1": [
-                    "047. Infernox - Black Flag [FREE DOWNLOAD].mp3",
+                    "049. Infernox - Black Flag [FREE DOWNLOAD].mp3",
                     "026. CosmosRecords - Vernex & Toxic Twins- Totof [Free DL].mp3"
                 ]
             },
             "Groupe de Clés 2": {
                 "Groupe de BPM 1": [
-                    "034. Asil Os - LEKS & Lisa - Le ciel est bleu.mp3"
+                    "036. Asil Os - LEKS & Lisa - Le ciel est bleu.mp3"
                 ]
             },
             "Groupe de Clés 3": {
                 "Groupe de BPM 1": [
-                    "052. Ratus - Ratus - L'Oraison Du Teufeur (2022) [FREE DOWNLOAD].mp3"
+                    "055. Ratus - Ratus - L'Oraison Du Teufeur (2022) [FREE DOWNLOAD].mp3"
                 ]
             },
             "Groupe de Clés 4": {
@@ -1119,16 +1145,7 @@
             },
             "Groupe de Clés 5": {
                 "Groupe de BPM 1": [
-                    "178. VISION 84 - Rene La Taupe - Mignon Mignon (VISION 84⧸SVNL8 Frenchcore Remix).mp3"
-                ]
-            }
-        }
-    },
-    "neotrance": {
-        "Basse Agressive": {
-            "Groupe de Clés 1": {
-                "Groupe de BPM 1": [
-                    "025. NeoFX - Sabali (Amadou & Mariam Remix) [FREE DL].mp3"
+                    "177. VISION 84 - Rene La Taupe - Mignon Mignon (VISION 84⧸SVNL8 Frenchcore Remix).mp3"
                 ]
             }
         }
@@ -1206,6 +1223,11 @@
             },
             "Groupe de Clés 2": {
                 "Groupe de BPM 1": [
+                    "188. GONZI - GONZI - DON'T STOP!.mp3"
+                ]
+            },
+            "Groupe de Clés 3": {
+                "Groupe de BPM 1": [
                     "24. SUITSIDE - F＊CK OFF!.mp3"
                 ]
             }
@@ -1224,7 +1246,7 @@
         "Basse Agressive": {
             "Groupe de Clés 1": {
                 "Groupe de BPM 1": [
-                    "038. Sinistroz - Sinistroz vs Dede The Core - Houba Dance.mp3"
+                    "039. Sinistroz - Sinistroz vs Dede The Core - Houba Dance.mp3"
                 ]
             }
         }
@@ -1247,7 +1269,7 @@
             },
             "Groupe de Clés 2": {
                 "Groupe de BPM 1": [
-                    "051. Sköne - Käze {feat. Ukiyo-e} 風.mp3"
+                    "053. Sköne - Käze {feat. Ukiyo-e} 風.mp3"
                 ]
             }
         }
@@ -1256,7 +1278,7 @@
         "Basse Agressive": {
             "Groupe de Clés 1": {
                 "Groupe de BPM 1": [
-                    "049. NeoFX - Joyeux Tekniversaire.mp3"
+                    "047. NeoFX - Joyeux Tekniversaire.mp3"
                 ]
             },
             "Groupe de Clés 2": {
@@ -1276,15 +1298,6 @@
             }
         }
     },
-    "pvc": {
-        "Basse Agressive": {
-            "Groupe de Clés 1": {
-                "Groupe de BPM 1": [
-                    "054. Ékipage Astral - Tuyau Tatane.mp3"
-                ]
-            }
-        }
-    },
     "politikore": {
         "Basse Agressive": {
             "Groupe de Clés 1": {
@@ -1294,11 +1307,20 @@
             }
         }
     },
+    "pvc": {
+        "Basse Agressive": {
+            "Groupe de Clés 1": {
+                "Groupe de BPM 1": [
+                    "054. Ékipage Astral - Tuyau Tatane.mp3"
+                ]
+            }
+        }
+    },
     "fracture": {
         "Basse Agressive": {
             "Groupe de Clés 1": {
                 "Groupe de BPM 1": [
-                    "057. Tibiakassé - Tibiakassé - Terre De Feu.mp3"
+                    "059. Tibiakassé - Tibiakassé - Terre De Feu.mp3"
                 ]
             },
             "Groupe de Clés 2": {
@@ -1326,21 +1348,6 @@
             }
         }
     },
-    "hardtekno": {
-        "Basse Agressive": {
-            "Groupe de Clés 1": {
-                "Groupe de BPM 1": [
-                    "063. HanniBaSs - HanniBaSs - Crystal Valley [UNSR-084].mp3",
-                    "181. Biomystic - Biomystic - Evil [UNSR-089].mp3"
-                ]
-            },
-            "Groupe de Clés 2": {
-                "Groupe de BPM 1": [
-                    "074. Graka - Milky Way - Graka X Hannibass.mp3"
-                ]
-            }
-        }
-    },
     "trance pop": {
         "Basse Agressive": {
             "Groupe de Clés 1": {
@@ -1364,6 +1371,21 @@
             }
         }
     },
+    "hardtekno": {
+        "Basse Agressive": {
+            "Groupe de Clés 1": {
+                "Groupe de BPM 1": [
+                    "063. HanniBaSs - HanniBaSs - Crystal Valley [UNSR-084].mp3",
+                    "181. Biomystic - Biomystic - Evil [UNSR-089].mp3"
+                ]
+            },
+            "Groupe de Clés 2": {
+                "Groupe de BPM 1": [
+                    "074. Graka - Milky Way - Graka X Hannibass.mp3"
+                ]
+            }
+        }
+    },
     "techno gauloise": {
         "Basse Agressive": {
             "Groupe de Clés 1": {
@@ -1372,15 +1394,6 @@
                 ],
                 "Groupe de BPM 2": [
                     "072. ShArn Producer - Le Loup, le Renard et la Belette - Bardix le Gaulois.mp3"
-                ]
-            }
-        }
-    },
-    "hybrid acidtekno": {
-        "Basse Agressive": {
-            "Groupe de Clés 1": {
-                "Groupe de BPM 1": [
-                    "067. Terrazules - Le Cri Du Loup.mp3"
                 ]
             }
         }
@@ -1403,6 +1416,15 @@
             }
         }
     },
+    "hybrid acidtekno": {
+        "Basse Agressive": {
+            "Groupe de Clés 1": {
+                "Groupe de BPM 1": [
+                    "067. Terrazules - Le Cri Du Loup.mp3"
+                ]
+            }
+        }
+    },
     "hardtek to frenchcore": {
         "Basse Agressive": {
             "Groupe de Clés 1": {
@@ -1416,7 +1438,7 @@
         "Basse Agressive": {
             "Groupe de Clés 1": {
                 "Groupe de BPM 1": [
-                    "071. AnübisX Live - RISE UP VS THE CLASH  (180 BPM AnübisX).mp3"
+                    "072. AnübisX Live - RISE UP VS THE CLASH  (180 BPM AnübisX).mp3"
                 ]
             }
         }
@@ -1452,7 +1474,16 @@
                 ],
                 "Groupe de BPM 2": [
                     "18. ESKAPE FESTIVAL & LABELS - Darktek & DyxxiZ Ft. Helen Ka - LE BATEAU BLANC [HSF65].mp3",
-                    "187. MARMS - La Chanson Des Cigales (MARMS Edit).mp3"
+                    "185. MARMS - La Chanson Des Cigales (MARMS Edit).mp3"
+                ]
+            }
+        }
+    },
+    "electronique : dance": {
+        "Basse Agressive": {
+            "Groupe de Clés 1": {
+                "Groupe de BPM 1": [
+                    "080. Boris - Soirée disco.mp3"
                 ]
             }
         }
@@ -1467,15 +1498,6 @@
             "Groupe de Clés 2": {
                 "Groupe de BPM 1": [
                     "097. Fyex - Hotel Room Service.mp3"
-                ]
-            }
-        }
-    },
-    "electronique : dance": {
-        "Basse Agressive": {
-            "Groupe de Clés 1": {
-                "Groupe de BPM 1": [
-                    "083. Boris - Soirée disco.mp3"
                 ]
             }
         }
@@ -1503,15 +1525,6 @@
             }
         }
     },
-    "\"dance & electronic\" (dance/techno/disco)": {
-        "Basse Agressive": {
-            "Groupe de Clés 1": {
-                "Groupe de BPM 1": [
-                    "088. DJ Gollum - The Bad Touch 2k23 (Hypertechno Mix).mp3"
-                ]
-            }
-        }
-    },
     "acidtekno": {
         "Basse Agressive": {
             "Groupe de Clés 1": {
@@ -1526,11 +1539,20 @@
             }
         }
     },
+    "\"dance & electronic\" (dance/techno/disco)": {
+        "Basse Agressive": {
+            "Groupe de Clés 1": {
+                "Groupe de BPM 1": [
+                    "088. DJ Gollum - The Bad Touch 2k23 (Hypertechno Mix).mp3"
+                ]
+            }
+        }
+    },
     "house to reverse bass": {
         "Basse Agressive": {
             "Groupe de Clés 1": {
                 "Groupe de BPM 1": [
-                    "090. CO&XIST - Super Mario World (CO&XIST Souilledit).mp3"
+                    "088. CO&XIST - Super Mario World (CO&XIST Souilledit).mp3"
                 ]
             }
         }
@@ -1539,7 +1561,7 @@
         "Basse Agressive": {
             "Groupe de Clés 1": {
                 "Groupe de BPM 1": [
-                    "088. Ékipage Astral - Gadoue Cacahuète.mp3"
+                    "090. Ékipage Astral - Gadoue Cacahuète.mp3"
                 ]
             }
         }
@@ -1553,11 +1575,11 @@
             }
         }
     },
-    "tribecore hardfloor": {
+    "darktek ": {
         "Basse Agressive": {
             "Groupe de Clés 1": {
                 "Groupe de BPM 1": [
-                    "093. Darktek - Darktek - L'enculeur D'arbre.mp3"
+                    "096. Darktek - L'enculeur D'arbre.mp3"
                 ]
             }
         }
@@ -1580,20 +1602,20 @@
             }
         }
     },
-    "hard remix": {
-        "Basse Agressive": {
-            "Groupe de Clés 1": {
-                "Groupe de BPM 1": [
-                    "099. GET HAN - A1 - Tagada Jones - Mort Aux Cons (Get Han Hardcore Remix Version 2021)- [vinyl DTK HS01].mp3"
-                ]
-            }
-        }
-    },
     "zomb rush": {
         "Basse Agressive": {
             "Groupe de Clés 1": {
                 "Groupe de BPM 1": [
                     "099. Sizem - Zomb Rush.mp3"
+                ]
+            }
+        }
+    },
+    "hard remix": {
+        "Basse Agressive": {
+            "Groupe de Clés 1": {
+                "Groupe de BPM 1": [
+                    "102. GET HAN - A1 - Tagada Jones - Mort Aux Cons (Get Han Hardcore Remix Version 2021)- [vinyl DTK HS01].mp3"
                 ]
             }
         }
@@ -1665,7 +1687,21 @@
         "Basse Agressive": {
             "Groupe de Clés 1": {
                 "Groupe de BPM 1": [
-                    "154. Lucas RHT - DTR.mp3"
+                    "158. Lucas RHT - DTR.mp3"
+                ]
+            }
+        }
+    },
+    "bounce": {
+        "Basse Agressive": {
+            "Groupe de Clés 1": {
+                "Groupe de BPM 1": [
+                    "163. Jonathan Sacco. - Smash Mouth - All Star (Teddy Cream & Christian Mimmo Remix).mp3"
+                ]
+            },
+            "Groupe de Clés 2": {
+                "Groupe de BPM 1": [
+                    "42. ARGOT - ARGOT - MY HUMPS (BOUNCE EDIT).mp3"
                 ]
             }
         }
@@ -1684,16 +1720,11 @@
             }
         }
     },
-    "bounce": {
+    "reggaeton": {
         "Basse Agressive": {
             "Groupe de Clés 1": {
                 "Groupe de BPM 1": [
-                    "162. Jonathan Sacco. - Smash Mouth - All Star (Teddy Cream & Christian Mimmo Remix).mp3"
-                ]
-            },
-            "Groupe de Clés 2": {
-                "Groupe de BPM 1": [
-                    "42. ARGOT - ARGOT - MY HUMPS (BOUNCE EDIT).mp3"
+                    "168. Giovanni - Victor.avt - Keen’v - A l’horizontale remix hardstyle ✨.mp3"
                 ]
             }
         }
@@ -1702,16 +1733,7 @@
         "Basse Agressive": {
             "Groupe de Clés 1": {
                 "Groupe de BPM 1": [
-                    "163. Rob Brainstorm - Smash Mouth - All Star (Rob Brainstorm Remix).mp3"
-                ]
-            }
-        }
-    },
-    "reggaeton": {
-        "Basse Agressive": {
-            "Groupe de Clés 1": {
-                "Groupe de BPM 1": [
-                    "170. Giovanni - Victor.avt - Keen’v - A l’horizontale remix hardstyle ✨.mp3"
+                    "166. Rob Brainstorm - Smash Mouth - All Star (Rob Brainstorm Remix).mp3"
                 ]
             }
         }
@@ -1729,7 +1751,7 @@
         "Basse Agressive": {
             "Groupe de Clés 1": {
                 "Groupe de BPM 1": [
-                    "173. St0n3r_Guy_420 - Eminem Without Me (Techno Remix).mp3"
+                    "176. St0n3r_Guy_420 - Eminem Without Me (Techno Remix).mp3"
                 ]
             }
         }
@@ -1797,20 +1819,20 @@
             }
         }
     },
-    "hypertechno": {
-        "Basse Agressive": {
-            "Groupe de Clés 1": {
-                "Groupe de BPM 1": [
-                    "64. FEL!X - FEL!X - HOT N COLD (HYPERTECHNO).mp3"
-                ]
-            }
-        }
-    },
     "new school tekno": {
         "Basse Agressive": {
             "Groupe de Clés 1": {
                 "Groupe de BPM 1": [
                     "58. Massive Orkestra - Massive Orkestra - Melting Vox [PURE-090].mp3"
+                ]
+            }
+        }
+    },
+    "hypertechno": {
+        "Basse Agressive": {
+            "Groupe de Clés 1": {
+                "Groupe de BPM 1": [
+                    "64. FEL!X - FEL!X - HOT N COLD (HYPERTECHNO).mp3"
                 ]
             }
         }

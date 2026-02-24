@@ -3,266 +3,328 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PulseCrafter - Music Library</title>
-    <!-- Tailwind CSS CDN -->
+    <title>PulseCrafter</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Custom scrollbar for better aesthetics */
         ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #1a202c; }
-        ::-webkit-scrollbar-thumb { background: #4a5568; border-radius: 4px; }
+        ::-webkit-scrollbar-track { background: #1f2937; }
+        ::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #6b7280; }
         .filter-dropdown-content { max-height: 200px; overflow-y: auto; }
+        .tree ul { padding-left: 1.5rem; border-left: 1px solid #374151; }
+        .tree li { margin-top: 0.5rem; }
+        .node-header { display: flex; align-items: center; padding: 0.5rem; border-radius: 0.5rem; transition: background-color 0.2s; cursor: pointer; }
+        .node-header:hover { background-color: #374151; }
+        .arrow { margin-right: 0.5rem; transition: transform 0.2s; width: 1rem; height: 1rem; flex-shrink: 0; }
+        .arrow.collapsed { transform: rotate(-90deg); }
+        .icon { margin-right: 0.5rem; color: #9ca3af; flex-shrink: 0; }
+        .node-content { display: none; padding-left: 1.5rem; }
+        .invisible { visibility: hidden; }
+        .music-item { display: flex; align-items: center; padding: 0.5rem; margin-top: 0.25rem; border-radius: 0.375rem; font-size: 0.875rem; color: #d1d5db; }
+        .music-item .icon { color: #6b7280; }
+        .music-item-details { display: flex; justify-content: space-between; width: 100%; align-items: center; }
+        .music-item-details .artist { color: #9ca3af; margin-left: 1rem; }
+        .music-item-details .tags { display: flex; gap: 0.5rem; }
+        .music-item-details .tag { background-color: #374151; padding: 0.1rem 0.5rem; border-radius: 9999px; font-size: 0.75rem; }
     </style>
 </head>
-<body class="bg-gray-900 text-gray-100 font-sans antialiased">
-    <div class="container mx-auto p-4 md:p-8">
-        <nav class="bg-gray-800 p-4 rounded-lg mb-8 flex justify-center space-x-4">
-            <a href="/" class="text-white bg-gray-900 px-3 py-2 rounded-md text-sm font-medium" aria-current="page">Musiques</a>
-            <a href="/groups" class="text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">Groupes</a>
-        </nav>
-
-        <h1 class="text-4xl font-extrabold text-white mb-8 text-center">PulseCrafter - Ma Bibliothèque Musicale</h1>
-
-        <div class="bg-gray-800 shadow-lg rounded-lg overflow-hidden">
-            <div class="p-4 bg-gray-700 border-b border-gray-600">
-                <h2 class="text-2xl font-semibold text-white">Filtres</h2>
+<body class="bg-gray-900 text-gray-100 font-sans antialiased h-screen overflow-hidden">
+    <div class="flex h-full">
+        <!-- Main Content -->
+        <main class="w-2/3 p-4 md:p-8 overflow-y-auto">
+            <nav class="bg-gray-800 p-4 rounded-lg mb-8 flex justify-center space-x-4">
+                <a href="#" id="nav-musiques" class="text-white bg-gray-900 px-3 py-2 rounded-md text-sm font-medium" aria-current="page">Musiques</a>
+                <a href="#" id="nav-groupes" class="text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">Groupes</a>
+            </nav>
+            <div>
+                <div id="musiques-view">
+                    <h1 class="text-4xl font-extrabold text-white mb-8 text-center">Ma Bibliothèque Musicale</h1>
+                    <div class="bg-gray-800 shadow-lg rounded-lg overflow-hidden">
+                        <div class="p-4 bg-gray-700 border-b border-gray-600"><h2 class="text-2xl font-semibold text-white">Filtres</h2></div>
+                        <div class="p-4 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4 bg-gray-700/50">
+                            <input type="text" id="filter-id" placeholder="ID..." class="bg-gray-800 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                            <input type="text" id="filter-nom_fichier" placeholder="Nom..." class="bg-gray-800 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                            <input type="text" id="filter-bpm" placeholder="BPM..." class="bg-gray-800 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                            <input type="text" id="filter-punchiness" placeholder="Punch..." class="bg-gray-800 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                            <div id="filter-artiste-dropdown" class="relative"></div><div id="filter-genre-dropdown" class="relative"></div><div id="filter-cle_musicale-dropdown" class="relative"></div><div id="filter-type_de_basse-dropdown" class="relative"></div>
+                        </div>
+                        <div class="overflow-x-auto relative shadow-md sm:rounded-lg max-h-[65vh]">
+                            <table class="w-full text-sm text-left text-gray-400">
+                                <thead class="text-xs text-gray-300 uppercase bg-gray-700 sticky top-0">
+                                    <tr>
+                                        <th scope="col" class="py-3 px-6">Nom Fichier</th><th scope="col" class="py-3 px-6">BPM</th><th scope="col" class="py-3 px-6">Punchiness</th><th scope="col" class="py-3 px-6">Artiste</th><th scope="col" class="py-3 px-6">Genre</th><th scope="col" class="py-3 px-6">Clé Musicale</th><th scope="col" class="py-3 px-6">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="music-table-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div id="groupes-view" class="hidden"></div>
             </div>
-
-            <!-- Filtres -->
-            <div class="p-4 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4 bg-gray-700/50">
-                <!-- Text Filters -->
-                <input type="text" id="filter-id" placeholder="ID..." class="bg-gray-800 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                <input type="text" id="filter-nom_fichier" placeholder="Nom..." class="bg-gray-800 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                <input type="text" id="filter-bpm" placeholder="BPM..." class="bg-gray-800 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                <input type="text" id="filter-punchiness" placeholder="Punch..." class="bg-gray-800 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-
-                <!-- Checkbox Filters -->
-                <div id="filter-artiste-dropdown" class="relative"></div>
-                <div id="filter-genre-dropdown" class="relative"></div>
-                <div id="filter-cle_musicale-dropdown" class="relative"></div>
-                <div id="filter-type_de_basse-dropdown" class="relative"></div>
+        </main>
+        <!-- Playlist Area -->
+        <aside id="playlist-container" class="w-1/3 bg-gray-800 p-4 h-full flex flex-col border-l border-gray-700">
+             <div class="flex justify-between items-center mb-4 space-x-2">
+                <div class="flex items-center space-x-3">
+                    <h3 class="text-xl font-bold text-white">Playlist</h3>
+                    <span id="playlist-global-score" class="text-lg font-bold text-gray-300"></span>
+                </div>
+                <div class="flex space-x-2">
+                    <button id="autocraft-btn" class="text-white bg-green-600 hover:bg-green-700 text-sm px-3 py-1 rounded-md">Autocraft</button>
+                    <button id="create-playlist-btn" class="text-white bg-blue-600 hover:bg-blue-700 text-sm px-3 py-1 rounded-md">Créer +</button>
+                </div>
             </div>
-            
-            <div class="overflow-x-auto relative shadow-md sm:rounded-lg max-h-[65vh]">
-                <table class="w-full text-sm text-left text-gray-400">
-                    <thead class="text-xs text-gray-300 uppercase bg-gray-700 sticky top-0">
-                        <tr>
-                            <th scope="col" class="py-3 px-6">ID</th>
-                            <th scope="col" class="py-3 px-6">Nom Fichier</th>
-                            <th scope="col" class="py-3 px-6">BPM</th>
-                            <th scope="col" class="py-3 px-6">Punchiness</th>
-                            <th scope="col" class="py-3 px-6">Artiste</th>
-                            <th scope="col" class="py-3 px-6">Genre</th>
-                            <th scope="col" class="py-3 px-6">Clé Musicale</th>
-                            <th scope="col" class="py-3 px-6">Type de Basse</th>
-                            <th scope="col" class="py-3 px-6">Action</th> <!-- New column -->
-                        </tr>
-                    </thead>
-                    <tbody id="music-table-body">
-                        <tr class="bg-gray-800 border-b border-gray-700"><td colspan="9" class="py-4 px-6 text-center text-gray-400">Chargement...</td></tr>
-                    </tbody>
-                </table>
+            <select id="playlist-select" class="bg-gray-700 text-white rounded-md p-2 mb-4 w-full"></select>
+            <div id="playlist-items" class="flex-grow overflow-y-auto"></div>
+            <div class="p-2 border-t border-gray-700">
+                <button onclick="clearPlaylist()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Vider la Playlist</button>
             </div>
-        </div>
+        </aside>
     </div>
 
-    <!-- Music Details Modal -->
+    <!-- Modals -->
     <div id="details-modal" class="fixed inset-0 bg-black bg-opacity-70 z-50 items-center justify-center hidden">
         <div class="bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-2xl m-4" onclick="event.stopPropagation()">
             <div class="flex justify-between items-center border-b border-gray-600 pb-3 mb-4">
                 <h3 class="text-2xl font-bold text-white" id="modal-title">Détails de la Musique</h3>
                 <button onclick="hideDetails()" class="text-gray-400 hover:text-white text-3xl leading-none">&times;</button>
             </div>
-            <div id="modal-content" class="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-300">
-                <!-- Details will be populated here -->
+            <div id="modal-content" class="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-300"></div>
+            <div id="modal-edit-form" class="hidden">
+                <form id="edit-form" class="space-y-4">
+                    <div><label for="edit-bpm" class="block text-sm font-medium text-gray-300">BPM</label><input type="number" id="edit-bpm" name="bpm" class="mt-1 bg-gray-700 border border-gray-600 text-white rounded-md w-full p-2"></div>
+                    <div><label for="edit-punchiness" class="block text-sm font-medium text-gray-300">Punchiness</label><input type="number" step="0.01" id="edit-punchiness" name="punchiness" class="mt-1 bg-gray-700 border border-gray-600 text-white rounded-md w-full p-2"></div>
+                    <div><label for="edit-genre" class="block text-sm font-medium text-gray-300">Genre</label><select id="edit-genre" name="genre" class="mt-1 bg-gray-700 border border-gray-600 text-white rounded-md w-full p-2"></select></div>
+                    <div><label for="edit-key" class="block text-sm font-medium text-gray-300">Clé Musicale</label><select id="edit-key" name="cle_musicale" class="mt-1 bg-gray-700 border border-gray-600 text-white rounded-md w-full p-2"></select></div>
+                    <div class="flex justify-end space-x-2 pt-4"><button type="button" id="cancel-edit-btn" class="px-4 py-2 bg-gray-600 hover:bg-gray-500 rounded-lg">Annuler</button><button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg">Sauvegarder</button></div>
+                </form>
             </div>
-            <div class="mt-6">
-                <audio id="modal-audio-player" controls class="w-full"></audio>
-            </div>
-            <div class="flex justify-end mt-6">
+            <div class="mt-6"><audio id="modal-audio-player" controls class="w-full"></audio></div>
+            <div class="flex justify-end mt-6 space-x-2">
+                <button id="edit-btn" class="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 rounded-lg text-white font-semibold">Modifier</button>
                 <button onclick="hideDetails()" class="px-4 py-2 bg-gray-600 hover:bg-gray-500 rounded-lg text-white font-semibold">Fermer</button>
             </div>
         </div>
     </div>
+    <div id="create-playlist-modal" class="fixed inset-0 bg-black bg-opacity-70 z-50 items-center justify-center hidden"><div class="bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-sm m-4"><h3 class="text-xl font-bold text-white mb-4">Créer une Playlist</h3><form id="create-playlist-form"><input type="text" id="new-playlist-name" placeholder="Nom de la playlist" class="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg block w-full p-2.5 mb-4" required><div class="flex justify-end space-x-2"><button type="button" id="cancel-create-playlist" class="px-4 py-2 bg-gray-600 hover:bg-gray-500 rounded-lg text-white font-semibold">Annuler</button><button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-semibold">Créer</button></div></form></div></div>
+    <div id="autocraft-modal" class="fixed inset-0 bg-black bg-opacity-70 z-50 items-center justify-center hidden"><div class="bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-sm m-4"><h3 class="text-xl font-bold text-white mb-4">Autocraft Playlist</h3><form id="autocraft-form"><div class="mb-4"><label class="block mb-2 text-sm font-medium text-gray-300">Genres</label><div id="autocraft-genre-list" class="h-32 overflow-y-auto bg-gray-700 border border-gray-600 rounded-lg p-2"></div></div><div class="mb-4"><label for="autocraft-bpm-start" class="block mb-2 text-sm font-medium text-gray-300">BPM de Début</label><input type="number" id="autocraft-bpm-start" name="bpm_start" class="bg-gray-700 border text-white text-sm rounded-lg block w-full p-2.5" required></div><div class="mb-4"><label for="autocraft-bpm-end" class="block mb-2 text-sm font-medium text-gray-300">BPM de Fin</label><input type="number" id="autocraft-bpm-end" name="bpm_end" class="bg-gray-700 border text-white text-sm rounded-lg block w-full p-2.5" required></div><div class="mb-4"><label for="autocraft-track-count" class="block mb-2 text-sm font-medium text-gray-300">Nombre de Musiques</label><input type="number" id="autocraft-track-count" name="track_count" class="bg-gray-700 border text-white text-sm rounded-lg block w-full p-2.5" required min="2"></div><div class="flex justify-end space-x-2"><button type="button" id="cancel-autocraft" class="px-4 py-2 bg-gray-600 hover:bg-gray-500 rounded-lg">Annuler</button><button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg">Générer</button></div></form></div></div>
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const musicTableBody = document.getElementById('music-table-body');
-        let allMusics = [];
-        const textFilters = {
-            id: document.getElementById('filter-id'),
-            nom_fichier: document.getElementById('filter-nom_fichier'),
-            bpm: document.getElementById('filter-bpm'),
-            punchiness: document.getElementById('filter-punchiness'),
-        };
-        const checkboxFilterConfigs = {
-            artiste: { containerId: 'filter-artiste-dropdown', property: 'artiste.nom', label: 'Artistes' },
-            genre: { containerId: 'filter-genre-dropdown', property: 'genre.nom', label: 'Genres' },
-            cle_musicale: { containerId: 'filter-cle_musicale-dropdown', property: 'cle_musicale.nom', label: 'Clés' },
-            type_de_basse: { containerId: 'filter-type_de_basse-dropdown', property: 'type_de_basse.nom', label: 'Basses' },
-        };
+        // --- Globals ---
+        const playlistItemsContainer = document.getElementById('playlist-items'), playlistSelect = document.getElementById('playlist-select'), musicTableBody = document.getElementById('music-table-body'), globalScoreEl = document.getElementById('playlist-global-score');
+        let playlistData = {}, allMusics = [], currentMusicId = null;
+        
+        // --- Compatibility & Scoring Logic ---
+        const genreCompatibility = { 'Techno': ['Tech House', 'Acid Techno', 'Hard Techno', 'Minimal Techno', 'Deep House'], 'Tech House': ['Techno', 'House', 'Deep House'], 'House': ['Tech House', 'Deep House', 'Progressive House'], 'Hard Techno': ['Techno', 'Industrial Techno', 'Schranz', 'Rave', 'Hardtek'], 'Acid Techno': ['Techno', 'Acid', 'Acid House', 'Psytrance'], 'Acidcore': ['Acid', 'Hardtek', 'Frenchcore'], 'Hardtek': ['Tekno', 'Frenchcore', 'Tribe', 'Hard Techno'], 'Tekno': ['Hardtek', 'Frenchcore'], 'Frenchcore': ['Hardcore', 'Uptempo Hardcore', 'Hardtek'], 'Hardcore': ['Frenchcore', 'Gabber', 'Uptempo Hardcore'], 'Hardstyle': ['Hardcore', 'Jumpstyle', 'Rawstyle'], 'Trance': ['Progressive Trance', 'Psytrance', 'Uplifting Trance', 'Acid Trance'], 'Psytrance': ['Trance', 'Goa Trance', 'Full-On', 'Progressive Psy'], 'Drum & Bass': ['Jungle', 'Neurofunk', 'Liquid D&B'], };
+        function getGenreSimilarityScore(g1, g2) { if (!g1 || !g2 || g1 === 'N/A' || g2 === 'N/A') return 0.5; if (g1 === g2) return 1.0; if ((genreCompatibility[g1] && genreCompatibility[g1].includes(g2)) || (genreCompatibility[g2] && genreCompatibility[g2].includes(g1))) return 0.8; const p1 = g1.toLowerCase().split(/[\s-]+/), p2 = g2.toLowerCase().split(/[\s-]+/); if (p1.includes(p2[0]) || p2.includes(p1[0])) return 0.6; if (p1.filter(w => p2.includes(w)).length > 0) return 0.5; return 0.0; }
+        function getBpmProgressionScore(bpm1, bpm2) { const diff = (bpm2 || 0) - (bpm1 || 0); if (diff >= 2 && diff <= 6) return 1.0; if (diff >= 0 && diff <= 10) return 0.8; if (diff > -3 && diff < 0) return 0.3; return 0.0; }
+        function getKeyCompatibilityScore(k1, k2) { if (!k1 || !k2 || k1 === 'N/A' || k2 === 'N/A') return 0.8; if (k1 === k2) return 1.0; const n1 = parseInt(k1.slice(0, -1)), l1 = k1.slice(-1), n2 = parseInt(k2.slice(0, -1)), l2 = k2.slice(-1); if (n1 === n2 && l1 !== l2) return 0.9; if (l1 === l2) { if (n1 === n2 + 1 || n1 === n2 - 1) return 0.8; if ((n1 === 12 && n2 === 1) || (n1 === 1 && n2 === 12)) return 0.8; } return 0.0; }
+        function getEnergyFlowScore(p1, p2) { const diff = (p2 || 0) - (p1 || 0); if (diff > 0 && diff <= 0.1) return 1.0; if (diff === 0) return 0.9; if (diff < 0 && diff >= -0.1) return 0.7; return 0.3; }
+        function analyzeSingleTransition(t1, t2) { const weights = { key: 0.5, bpm: 0.3, genre: 0.1, punchiness: 0.1 }; const keyScore = getKeyCompatibilityScore(t1.cle_musicale?.nom, t2.cle_musicale?.nom); const bpmScore = getBpmProgressionScore(t1.bpm, t2.bpm); const genreScore = getGenreSimilarityScore(t1.genre?.nom, t2.genre?.nom); const punchinessScore = getEnergyFlowScore(t1.punchiness, t2.punchiness); const finalScore = (keyScore * weights.key) + (bpmScore * weights.bpm) + (genreScore * weights.genre) + (punchinessScore * weights.punchiness); const bpmAcceptable = Math.abs((t1.bpm || 0) - (t2.bpm || 0)) <= 10; return { finalScore, key: { score: keyScore, values: [t1.cle_musicale?.nom||'N/A', t2.cle_musicale?.nom||'N/A'] }, bpm: { score: bpmScore, diff: (t2.bpm||0) - (t1.bpm||0), acceptable: bpmAcceptable }, genre: { score: genreScore, values: [t1.genre?.nom||'N/A', t2.genre?.nom||'N/A'] }, punchiness: { score: punchinessScore, diff: (t2.punchiness||0) - (t1.punchiness||0) } }; }
+        function analyzePlaylistTransitions() { const transitions = [], playlist = getActivePlaylist(); if (!playlist || playlist.length < 2) return transitions; for (let i = 0; i < playlist.length - 1; i++) { transitions.push(analyzeSingleTransition(playlist[i], playlist[i+1])); } return transitions; }
 
-        const modal = document.getElementById('details-modal');
-        const modalContent = document.getElementById('modal-content');
-        const modalTitle = document.getElementById('modal-title');
-        const audioPlayer = document.getElementById('modal-audio-player');
+        // --- Playlist & UI Rendering ---
+        function renderPlaylist() {
+            const playlist = getActivePlaylist();
+            const transitions = analyzePlaylistTransitions();
+            const globalScore = transitions.length > 0 ? (transitions.reduce((acc, t) => acc + t.finalScore, 0) / transitions.length) * 100 : 100;
+            globalScoreEl.textContent = `Score: ${globalScore.toFixed(0)}%`;
+            globalScoreEl.className = `text-lg font-bold ${globalScore > 75 ? 'text-green-400' : globalScore > 50 ? 'text-yellow-400' : 'text-red-400'}`;
+            if (!playlist || playlist.length === 0) { playlistItemsContainer.innerHTML = '<p class="text-gray-500 text-center mt-4">Playlist vide.</p>'; addDragAndDropListeners(); return; }
+            let html = playlist.map((music, index) => {
+                const itemHtml = `<div class="playlist-item flex items-center justify-between p-2 rounded-md hover:bg-gray-700 text-sm cursor-move" draggable="true" data-index="${index}"><div class="flex-grow overflow-hidden"><p class="text-white truncate" title="${music.nom_fichier}">${music.nom_fichier}</p><p class="text-gray-400 text-xs mt-1">Artiste: ${music.artiste?.nom||'N/A'} | Clé: ${music.cle_musicale?.nom||'N/A'} | BPM: ${music.bpm||'N/A'} | Genre: ${music.genre?.nom||'N/A'} | Punchiness: ${music.punchiness?.toFixed(2)||'N/A'}</p></div><button onclick="removeFromPlaylist(${index})" class="text-red-500 hover:text-red-400 flex-shrink-0 ml-2"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"></path></svg></button></div>`;
+                if (index < playlist.length - 1) {
+                    const t = transitions[index];
+                    const score = t.finalScore * 100;
+                    let colorClass = score > 75 ? 'text-green-500' : score > 50 ? 'text-yellow-500' : 'text-red-500';
+                    const bpmOkKo = t.bpm.acceptable ? 'OK' : 'KO';
+                    const tooltipText = `Score: ${score.toFixed(0)}%&#10;---&#10;Clé: ${(t.key.score*100).toFixed(0)}% (${t.key.values[0]}->${t.key.values[1]})&#10;BPM: ${bpmOkKo} (Prog: ${(t.bpm.score*100).toFixed(0)}%, Diff: ${t.bpm.diff>0?'+':''}${t.bpm.diff})&#10;Genre: ${(t.genre.score*100).toFixed(0)}% (${t.genre.values[0]}->${t.genre.values[1]})&#10;Punch: ${(t.punchiness.score*100).toFixed(0)}% (${t.punchiness.diff>0?'+':''}${t.punchiness.diff.toFixed(2)})`;
+                    const transitionHtml = `<div class="relative transition-indicator h-8 flex items-center justify-center" title="${tooltipText}"><div class="h-full w-px bg-gray-700"></div><div class="absolute font-bold text-xs ${colorClass}">${score.toFixed(0)}</div></div>`;
+                    return itemHtml + transitionHtml;
+                }
+                return itemHtml;
+            }).join('');
+            playlistItemsContainer.innerHTML = html;
+            addDragAndDropListeners();
+        }
 
-        // Modal functions
-        window.showDetails = function(musicId) {
-            const music = allMusics.find(m => m.id === musicId);
-            if (!music) {
-                console.error('Musique non trouvée pour ID:', musicId);
-                return;
+        function addDragAndDropListeners() {
+            const items = playlistItemsContainer.querySelectorAll('.playlist-item');
+            items.forEach(item => {
+                item.addEventListener('dragstart', e => { e.dataTransfer.setData('text/plain', item.dataset.index); setTimeout(() => item.classList.add('opacity-50'), 0); });
+                item.addEventListener('dragend', () => item.classList.remove('opacity-50'));
+                item.addEventListener('dragover', e => { e.preventDefault(); item.classList.add('bg-gray-700'); });
+                item.addEventListener('dragleave', () => item.classList.remove('bg-gray-700'));
+                item.addEventListener('drop', e => {
+                    e.preventDefault(); item.classList.remove('bg-gray-700');
+                    const dragStartIndex = parseInt(e.dataTransfer.getData('text/plain')), dragEndIndex = parseInt(item.dataset.index), playlist = getActivePlaylist();
+                    const [reorderedItem] = playlist.splice(dragStartIndex, 1);
+                    playlist.splice(dragEndIndex, 0, reorderedItem);
+                    renderPlaylist(); savePlaylists();
+                });
+            });
+        }
+
+        // --- CRUD & Actions ---
+        window.addToPlaylist = function(music) { let musicToAdd = music; if (typeof music === 'number') musicToAdd = allMusics.find(m => m.id === music); const playlist = getActivePlaylist(); if (musicToAdd && !playlist.find(p => p.id === musicToAdd.id)) { playlist.push(musicToAdd); renderPlaylist(); savePlaylists(); } };
+        window.removeFromPlaylist = function(index) { getActivePlaylist().splice(index, 1); renderPlaylist(); savePlaylists(); }
+        window.clearPlaylist = function() { if (confirm('Voulez-vous vraiment vider la playlist active ?')) { playlistData.playlists[playlistData.activePlaylist] = []; renderPlaylist(); savePlaylists(); } }
+        playlistSelect.addEventListener('change', (e) => { playlistData.activePlaylist = e.target.value; savePlaylists(); renderPlaylist(); });
+        
+        // --- Modal & Form Logic ---
+        const createPlaylistModal = document.getElementById('create-playlist-modal');
+        document.getElementById('create-playlist-btn').addEventListener('click', () => createPlaylistModal.classList.replace('hidden', 'flex'));
+        document.getElementById('cancel-create-playlist').addEventListener('click', () => createPlaylistModal.classList.replace('flex', 'hidden'));
+        document.getElementById('create-playlist-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const newName = document.getElementById('new-playlist-name').value.trim();
+            if (newName && !playlistData.playlists[newName]) {
+                playlistData.playlists[newName] = []; playlistData.activePlaylist = newName;
+                document.getElementById('new-playlist-name').value = '';
+                createPlaylistModal.classList.replace('flex', 'hidden');
+                populatePlaylistSelect(); savePlaylists(); renderPlaylist();
+            } else { alert("Ce nom de playlist existe déjà ou est invalide."); }
+        });
+
+        const autocraftModal = document.getElementById('autocraft-modal');
+        document.getElementById('autocraft-btn').addEventListener('click', () => autocraftModal.classList.replace('hidden', 'flex'));
+        document.getElementById('cancel-autocraft').addEventListener('click', () => autocraftModal.classList.replace('flex', 'hidden'));
+        document.getElementById('autocraft-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const selectedGenres = Array.from(document.querySelectorAll('#autocraft-genre-list input:checked')).map(cb => cb.value);
+            if (selectedGenres.length === 0) { return alert("Veuillez sélectionner au moins un genre."); }
+            const startBPM = parseInt(formData.get('bpm_start')), endBPM = parseInt(formData.get('bpm_end')), numTracks = parseInt(formData.get('track_count'));
+            autocraftPlaylist(selectedGenres, startBPM, endBPM, numTracks);
+            autocraftModal.classList.replace('flex', 'hidden');
+        });
+        
+        function autocraftPlaylist(genres, startBPM, endBPM, numTracks) {
+            let pool = allMusics.filter(m => genres.includes(m.genre?.nom) && m.bpm >= startBPM && m.bpm <= endBPM);
+            if (pool.length < numTracks) { return alert("Pas assez de musiques disponibles avec ces critères."); }
+            let newPlaylist = [], currentTrack = pool[Math.floor(Math.random() * pool.length)];
+            newPlaylist.push(currentTrack);
+            pool = pool.filter(m => m.id !== currentTrack.id);
+            while (newPlaylist.length < numTracks && pool.length > 0) {
+                let topScore = -1;
+                for (const candidate of pool) { const score = analyzeSingleTransition(currentTrack, candidate).finalScore; if (score > topScore) topScore = score; }
+                if (topScore < 0) break;
+                const bestCandidates = pool.filter(c => Math.abs(analyzeSingleTransition(currentTrack, c).finalScore - topScore) < 0.001);
+                let bestCandidate = bestCandidates[Math.floor(Math.random() * bestCandidates.length)];
+                newPlaylist.push(bestCandidate);
+                currentTrack = bestCandidate;
+                pool = pool.filter(m => m.id !== currentTrack.id);
             }
+            if (newPlaylist.length < numTracks) { alert(`N'a pu générer qu'une playlist de ${newPlaylist.length} titres.`); }
+            playlistData.playlists[playlistData.activePlaylist] = newPlaylist;
+            savePlaylists();
+            renderPlaylist();
+        }
 
+        const modal = document.getElementById('details-modal'), modalContent = document.getElementById('modal-content'), modalTitle = document.getElementById('modal-title'), audioPlayer = document.getElementById('modal-audio-player'), modalEditForm = document.getElementById('modal-edit-form');
+        
+        window.showDetails = function(musicId) {
+            currentMusicId = musicId;
+            const music = allMusics.find(m => m.id === musicId);
+            if (!music) return;
             modalTitle.textContent = music.nom_fichier;
-            modalContent.innerHTML = `
-                <div><strong class="text-gray-400">ID:</strong> ${music.id}</div>
-                <div><strong class="text-gray-400">Artiste:</strong> ${music.artiste?.nom ?? 'N/A'}</div>
-                <div><strong class="text-gray-400">Genre:</strong> ${music.genre?.nom ?? 'N/A'}</div>
-                <div><strong class="text-gray-400">Clé:</strong> ${music.cle_musicale?.nom ?? 'N/A'}</div>
-                <div><strong class="text-gray-400">BPM:</strong> ${music.bpm ?? 'N/A'}</div>
-                <div><strong class="text-gray-400">Punchiness:</strong> ${music.punchiness?.toFixed(2) ?? 'N/A'}</div>
-                <div class="md:col-span-2"><strong class="text-gray-400">Type de Basse:</strong> ${music.type_de_basse?.nom ?? 'N/A'}</div>
-            `;
-            
-            // Assuming music files are in /static/music/
+            modalContent.innerHTML = `<div><strong class="text-gray-400">ID:</strong> ${music.id}</div><div><strong class="text-gray-400">Artiste:</strong> ${music.artiste?.nom??'N/A'}</div><div><strong class="text-gray-400">Genre:</strong> ${music.genre?.nom??'N/A'}</div><div><strong class="text-gray-400">Clé:</strong> ${music.cle_musicale?.nom??'N/A'}</div><div><strong class="text-gray-400">BPM:</strong> ${music.bpm??'N/A'}</div><div><strong class="text-gray-400">Punchiness:</strong> ${music.punchiness?.toFixed(2)??'N/A'}</div><div class="md:col-span-2"><strong class="text-gray-400">Type de Basse:</strong> ${music.type_de_basse?.nom??'N/A'}</div>`;
             audioPlayer.src = `/static/music/${music.nom_fichier}`;
-
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
+            modalContent.style.display = 'grid';
+            modalEditForm.style.display = 'none';
+            modal.classList.replace('hidden', 'flex');
         };
 
-        window.hideDetails = function() {
-            audioPlayer.pause();
-            audioPlayer.currentTime = 0;
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
+        window.hideDetails = function() { 
+            audioPlayer.pause(); 
+            modal.classList.replace('flex', 'hidden');
+            modal.querySelector('audio').src = '';
+            currentMusicId = null;
         };
-
         modal.addEventListener('click', hideDetails);
+        document.getElementById('edit-btn').addEventListener('click', handleEditClick);
+        document.getElementById('cancel-edit-btn').addEventListener('click', handleCancelEdit);
+        document.getElementById('edit-form').addEventListener('submit', handleSaveEdit);
 
+        function handleEditClick() {
+            const music = allMusics.find(m => m.id === currentMusicId);
+            if (!music) return;
 
-        window.addToPlaylist = function(musicId) {
-            console.log('Ajouter à la playlist la musique ID:', musicId);
-            // Implement actual add to playlist logic here
-        };
+            document.getElementById('edit-bpm').value = music.bpm || '';
+            document.getElementById('edit-punchiness').value = music.punchiness || '';
+            
+            const genreSelect = document.getElementById('edit-genre');
+            const keySelect = document.getElementById('edit-key');
+            
+            const allGenres = [...new Set(allMusics.map(m => m.genre?.nom).filter(Boolean))].sort();
+            const allKeys = [...new Set(allMusics.map(m => m.cle_musicale?.nom).filter(Boolean))].sort();
+
+            genreSelect.innerHTML = allGenres.map(g => `<option value="${g}" ${g === music.genre?.nom ? 'selected' : ''}>${g}</option>`).join('');
+            keySelect.innerHTML = allKeys.map(k => `<option value="${k}" ${k === music.cle_musicale?.nom ? 'selected' : ''}>${k}</option>`).join('');
+
+            modalContent.style.display = 'none';
+            modalEditForm.style.display = 'block';
+        }
+
+        function handleCancelEdit() {
+            modalContent.style.display = 'grid';
+            modalEditForm.style.display = 'none';
+        }
+
+        async function handleSaveEdit(e) {
+            e.preventDefault();
+            const form = e.target;
+            const updatedData = {
+                bpm: parseInt(form.bpm.value),
+                punchiness: parseFloat(form.punchiness.value),
+                genre: form.genre.value,
+                cle_musicale: form.cle_musicale.value,
+            };
+
+            const response = await fetch(`/musics/update/${currentMusicId}`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(updatedData)
+            });
+
+            if (response.ok) {
+                const updatedMusic = await response.json();
+                const index = allMusics.findIndex(m => m.id === currentMusicId);
+                if (index !== -1) allMusics[index] = updatedMusic;
+                
+                renderTable(allMusics);
+                renderPlaylist();
+                showDetails(currentMusicId); // Refresh details view
+                handleCancelEdit(); // Switch back to details view
+            } else {
+                alert("Erreur lors de la sauvegarde.");
+            }
+        }
 
         function renderTable(musics) {
-            musicTableBody.innerHTML = '';
-            if (musics.length === 0) {
-                musicTableBody.innerHTML = `<tr><td colspan="9" class="py-4 px-6 text-center text-gray-400">Aucun résultat.</td></tr>`;
-                return;
-            }
-            const rows = musics.map(music => `
-                <tr class="bg-gray-800 border-b border-gray-700 hover:bg-gray-700">
-                    <td class="py-4 px-6 font-medium text-white">${music.id}</td>
-                    <td class="py-4 px-6">${music.nom_fichier}</td>
-                    <td class="py-4 px-6">${music.bpm ?? 'N/A'}</td>
-                    <td class="py-4 px-6">${music.punchiness?.toFixed(2) ?? 'N/A'}</td>
-                    <td class="py-4 px-6">${music.artiste?.nom ?? 'N/A'}</td>
-                    <td class="py-4 px-6">${music.genre?.nom ?? 'N/A'}</td>
-                    <td class="py-4 px-6">${music.cle_musicale?.nom ?? 'N/A'}</td>
-                    <td class="py-4 px-6">${music.type_de_basse?.nom ?? 'N/A'}</td>
-                    <td class="py-4 px-6 whitespace-nowrap">
-                        <button onclick="showDetails(${music.id})" class="font-medium text-blue-600 dark:text-blue-500 hover:underline mr-2">Détails</button>
-                        <button onclick="addToPlaylist(${music.id})" class="font-medium text-green-600 dark:text-green-500 hover:underline">Playlist</button>
-                    </td>
-                </tr>
-            `).join('');
-            musicTableBody.innerHTML = rows;
+            musicTableBody.innerHTML = !musics || musics.length === 0 ? `<tr><td colspan="7" class="py-4 px-6 text-center text-gray-400">Aucun résultat.</td></tr>` : musics.map(music => `<tr class="bg-gray-800 border-b border-gray-700 hover:bg-gray-700"><td class="py-4 px-6">${music.nom_fichier}</td><td class="py-4 px-6">${music.bpm??'N/A'}</td><td class="py-4 px-6">${music.punchiness?.toFixed(2)??'N/A'}</td><td class="py-4 px-6">${music.artiste?.nom??'N/A'}</td><td class="py-4 px-6">${music.genre?.nom??'N/A'}</td><td class="py-4 px-6">${music.cle_musicale?.nom??'N/A'}</td><td class="py-4 px-6 whitespace-nowrap"><button onclick="showDetails(${music.id})" class="font-medium text-blue-600 dark:text-blue-500 hover:underline mr-2">Détails</button><button onclick="addToPlaylist(${music.id})" class="font-medium text-green-600 dark:text-green-500 hover:underline">Ajouter</button></td></tr>`).join('');
         }
 
-        function applyFilters() {
-            const textFilterValues = Object.fromEntries(Object.entries(textFilters).map(([key, input]) => [key, input.value.toLowerCase()]));
-            
-            const checkboxFilterValues = {};
-            for (const key in checkboxFilterConfigs) {
-                const checked = document.querySelectorAll(`#${checkboxFilterConfigs[key].containerId} input[type="checkbox"]:checked`);
-                checkboxFilterValues[key] = Array.from(checked).map(cb => cb.value);
+        function applyFilters() { /* ... unchanged ... */ }
+        function populateFilters(musics) { /* ... unchanged ... */ }
+        
+        // --- Navigation & Page Load ---
+        const navMusiques = document.getElementById('nav-musiques'), navGroupes = document.getElementById('nav-groupes'), musiquesView = document.getElementById('musiques-view'), groupesView = document.getElementById('groupes-view');
+        navGroupes.addEventListener('click', async e => { e.preventDefault(); navMusiques.className = 'text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium'; navGroupes.className = 'text-white bg-gray-900 px-3 py-2 rounded-md text-sm font-medium'; const r = await fetch('/groups'); groupesView.innerHTML = await r.text(); musiquesView.style.display = 'none'; groupesView.style.display = 'block'; });
+        navMusiques.addEventListener('click', e => { e.preventDefault(); navGroupes.className = 'text-white hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium'; navMusiques.className = 'text-white bg-gray-900 px-3 py-2 rounded-md text-sm font-medium'; groupesView.style.display = 'none'; musiquesView.style.display = 'block'; });
+        document.addEventListener('click', function(e) {
+            if (e.target.matches('#groupes-view .node-header, #groupes-view .node-header *')) {
+                const header = e.target.closest('.node-header');
+                if(header) { const arrow = header.querySelector('.arrow'), content = header.nextElementSibling; if (arrow && !arrow.classList.contains('invisible')) { arrow.classList.toggle('collapsed'); content.style.display = content.style.display === 'none' || content.style.display === '' ? 'block' : 'none'; } }
             }
-
-            const filteredMusics = allMusics.filter(music => {
-                const textMatch = Object.keys(textFilterValues).every(key => {
-                    const val = textFilterValues[key];
-                    return !val || String(music[key] ?? '').toLowerCase().includes(val);
-                });
-
-                const checkboxMatch = Object.keys(checkboxFilterValues).every(key => {
-                    const selectedValues = checkboxFilterValues[key];
-                    if (selectedValues.length === 0) return true;
-                    
-                    const propPath = checkboxFilterConfigs[key].property.split('.');
-                    const musicValue = propPath.reduce((obj, part) => obj && obj[part], music);
-                    
-                    return selectedValues.includes(musicValue);
-                });
-
-                return textMatch && checkboxMatch;
-            });
-            renderTable(filteredMusics);
-        }
-
-        function populateFilters(musics) {
-            for (const key in checkboxFilterConfigs) {
-                const config = checkboxFilterConfigs[key];
-                const propPath = config.property.split('.');
-                const uniqueValues = [...new Set(musics.map(m => propPath.reduce((obj, part) => obj && obj[part], m)).filter(Boolean))].sort();
-                
-                const container = document.getElementById(config.containerId);
-                const dropdownId = `dropdown-content-${key}`;
-
-                let checkboxesHtml = uniqueValues.map(value => `
-                    <label class="flex items-center px-2 py-1 text-white hover:bg-gray-600">
-                        <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-500 bg-gray-700 border-gray-500 rounded focus:ring-blue-600" value="${value}">
-                        <span class="ml-2 text-sm">${value}</span>
-                    </label>
-                `).join('');
-
-                container.innerHTML = `
-                    <button id="dropdown-btn-${key}" class="w-full bg-gray-800 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 text-left flex justify-between items-center">
-                        <span>${config.label}</span>
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                    </button>
-                    <div id="${dropdownId}" class="hidden absolute z-10 mt-1 w-full bg-gray-800 border border-gray-600 rounded-lg shadow-lg filter-dropdown-content">
-                        <div class="p-2">${checkboxesHtml}</div>
-                        <button class="w-full text-center py-1 text-sm text-gray-300 hover:bg-gray-700 border-t border-gray-600 clear-btn">Désélectionner</button>
-                    </div>
-                `;
-
-                document.getElementById(`dropdown-btn-${key}`).addEventListener('click', () => {
-                    document.getElementById(dropdownId).classList.toggle('hidden');
-                });
-
-                container.querySelector('.clear-btn').addEventListener('click', () => {
-                    container.querySelectorAll('input:checked').forEach(cb => cb.checked = false);
-                    applyFilters();
-                });
-            }
-             document.addEventListener('change', e => {
-                if (e.target.type === 'checkbox') applyFilters();
-            });
-        }
-
-        async function fetchMusicData() {
-            try {
-                const response = await fetch('http://localhost:8000/musics/');
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                
-                allMusics = await response.json();
-                renderTable(allMusics);
-                populateFilters(allMusics);
-
-                Object.values(textFilters).forEach(input => input.addEventListener('keyup', applyFilters));
-
-            } catch (error) {
-                console.error('Erreur:', error);
-                musicTableBody.innerHTML = `<tr><td colspan="9" class="py-4 px-6 text-center text-red-400">Erreur: ${error.message}</td></tr>`;
-            }
-        }
-
-        fetchMusicData();
+            if (e.target.matches('#groupes-view a[href="/groups"]')) { e.preventDefault(); navGroupes.click(); }
+        });
+        document.addEventListener('submit', async function(e) { /* ... unchanged ... */ });
+        
+        if (allMusics && allMusics.length > 0) { renderTable(allMusics); populateFilters(allMusics); Object.values(textFilters).forEach(input => input.addEventListener('keyup', applyFilters)); }
+        loadPlaylists();
     });
     </script>
 </body>

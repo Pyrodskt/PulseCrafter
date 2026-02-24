@@ -1,14 +1,23 @@
 import sys
 import os
-from flask import Flask, render_template, request
-from sqlalchemy.orm import joinedload, contains_eager
+from flask import Flask, render_template, request, jsonify
+from sqlalchemy.orm import joinedload
 from sqlalchemy import and_
+import json
 
 # Ajoute la racine du projet au PYTHONPATH pour permettre les imports
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 # Importe les modèles et la session de la base de données
-from DB.database_models import SessionLocal, Group as GroupDB, Musique as MusiqueDB, GenreMusical as GenreDB, CleMusicale as CleDB
+from DB.database_models import (
+    SessionLocal, 
+    Group as GroupDB, 
+    Musique as MusiqueDB, 
+    GenreMusical as GenreDB, 
+    CleMusicale as CleDB,
+    TypeDeBasse as TypeDeBasseDB,
+    Artiste as ArtisteDB
+)
 
 # Basic Flask setup
 app = Flask(__name__)
@@ -92,8 +101,32 @@ def get_group_hierarchy(session, filters):
 
 @app.route('/')
 def index():
-    """Rend la page d'accueil principale."""
-    return render_template('index.html')
+    """Rend la page d'accueil principale avec les données musicales."""
+    db_session = SessionLocal()
+    try:
+        musics_query = db_session.query(MusiqueDB).options(
+            joinedload(MusiqueDB.artiste),
+            joinedload(MusiqueDB.genre),
+            joinedload(MusiqueDB.cle_musicale),
+            joinedload(MusiqueDB.type_de_basse)
+        ).order_by(MusiqueDB.id).all()
+
+        music_data = []
+        for m in musics_query:
+            music_data.append({
+                "id": m.id,
+                "nom_fichier": m.nom_fichier,
+                "bpm": m.bpm,
+                "punchiness": m.punchiness,
+                "artiste": {"nom": m.artiste.nom if m.artiste else 'N/A'},
+                "genre": {"nom": m.genre.nom if m.genre else 'N/A'},
+                "cle_musicale": {"nom": m.cle_musicale.nom if m.cle_musicale else 'N/A'},
+                "type_de_basse": {"nom": m.type_de_basse.nom if m.type_de_basse else 'N/A'},
+            })
+    finally:
+        db_session.close()
+        
+    return render_template('index.html', musics_json=json.dumps(music_data))
 
 @app.route('/groups')
 def groups():
@@ -125,6 +158,53 @@ def groups():
                            all_genres=all_genres, 
                            all_keys=all_keys,
                            filters=active_filters)
+
+@app.route('/musics/update/<int:music_id>', methods=['POST'])
+def update_music(music_id):
+    data = request.json
+    db_session = SessionLocal()
+    try:
+        music = db_session.query(MusiqueDB).filter(MusiqueDB.id == music_id).first()
+        if not music:
+            return jsonify({"error": "Musique non trouvée"}), 404
+
+        if 'bpm' in data and data['bpm'] is not None:
+            music.bpm = int(data['bpm'])
+        if 'punchiness' in data and data['punchiness'] is not None:
+            music.punchiness = float(data['punchiness'])
+        
+        if 'genre' in data:
+            genre = db_session.query(GenreDB).filter(GenreDB.nom == data['genre']).first()
+            if not genre:
+                genre = GenreDB(nom=data['genre'])
+                db_session.add(genre)
+            music.genre = genre
+        
+        if 'cle_musicale' in data:
+            key = db_session.query(CleDB).filter(CleDB.nom == data['cle_musicale']).first()
+            if not key:
+                key = CleDB(nom=data['cle_musicale'])
+                db_session.add(key)
+            music.cle_musicale = key
+
+        db_session.commit()
+        db_session.refresh(music)
+        
+        updated_music_data = {
+            "id": music.id, "nom_fichier": music.nom_fichier, "bpm": music.bpm,
+            "punchiness": music.punchiness,
+            "artiste": {"nom": music.artiste.nom if music.artiste else 'N/A'},
+            "genre": {"nom": music.genre.nom if music.genre else 'N/A'},
+            "cle_musicale": {"nom": music.cle_musicale.nom if music.cle_musicale else 'N/A'},
+            "type_de_basse": {"nom": music.type_de_basse.nom if music.type_de_basse else 'N/A'}
+        }
+        return jsonify(updated_music_data)
+
+    except Exception as e:
+        db_session.rollback()
+        return jsonify({"error": str(e)}), 500
+    finally:
+        db_session.close()
 
 if __name__ == '__main__':
     # S'assure que la base de données et les tables existent
