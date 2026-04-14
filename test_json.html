@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test JSON Parsing</title>
+</head>
+<body>
+    <h1>Testing JSON Parsing</h1>
+    <div id="output"></div>
+
+    <script>
+        // Test data similar to what Flask sends
+        const testData = [
+            {"id": 1, "nom_fichier": "test1.mp3", "bpm": 120},
+            {"id": 2, "nom_fichier": "test2.mp3", "bpm": 130}
+        ];
+
+        const output = document.getElementById('output');
+
+        try {
+            // Test basic JSON parsing
+            const jsonString = JSON.stringify(testData);
+            output.innerHTML += '<p>JSON stringify works: ' + jsonString.substring(0, 50) + '...</p>';
+
+            const parsed = JSON.parse(jsonString);
+            output.innerHTML += '<p>JSON parse works: ' + parsed.length + ' items</p>';
+
+            // Test template-style injection (simulating Jinja2)
+            const templateStyle = `[
+                {"id": 1, "nom_fichier": "test1.mp3", "bpm": 120},
+                {"id": 2, "nom_fichier": "test2.mp3", "bpm": 130}
+            ]`;
+
+            output.innerHTML += '<p>Template style string length: ' + templateStyle.length + '</p>';
+
+            const templateParsed = JSON.parse(templateStyle);
+            output.innerHTML += '<p>Template style parse works: ' + templateParsed.length + ' items</p>';
+
+        } catch (e) {
+            output.innerHTML += '<p>Error: ' + e.message + '</p>';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+DEBUG: Retrieved 1042 musics from database
+DEBUG: First music: {'id': 1, 'nom_fichier': '5K4M A.K.A SYSTAIME - JE SUIS DE BONNE HUMEUR CE MATIN.mp3', 'bpm': 96, 'punchiness': 4.125593282219788, 'artiste': {'nom': '5K4M A.K.A SYSTAIME'}, 'genre': {'nom': 'techno'}, 'cle_musicale': {'nom': 'E Minor'}, 'type_de_basse': {'nom': 'Basse Agressive'}}
+DEBUG: About to render template with musics_json length: 1042
+DEBUG: musics_json type: <class 'list'>
+DEBUG: musics_json content sample: [{'id': 1, 'nom_fichier': '5K4M A.K.A SYSTAIME - JE SUIS DE BONNE HUMEUR CE MATIN.mp3', 'bpm': 96, 'punchiness': 4.125593282219788, 'artiste': {'nom': '5K4M A.K.A SYSTAIME'}, 'genre': {'nom': 'techno'}, 'cle_musicale': {'nom': 'E Minor'}, 'type_de_basse': {'nom': 'Basse Agressive'}}, {'id': 2, 'nom_fichier': 'ABOUT THAT - Who Let The Dogs Out Feat. EVALINA.mp3', 'bpm': 123, 'punchiness': 3.408755843431518, 'artiste': {'nom': 'ABOUT THAT'}, 'genre': {'nom': 'dance & edm'}, 'cle_musicale': {'nom': 'G Minor'}, 'type_de_basse': {'nom': 'Basse Agressive'}}]

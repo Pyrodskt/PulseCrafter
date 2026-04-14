@@ -18,6 +18,22 @@ from mutagen.easyid3 import EasyID3
 from mutagen import File
 import concurrent.futures
 
+# Ajoute la racine du projet au PYTHONPATH pour permettre les imports inter-modules
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+from sqlalchemy.orm import Session
+from DB.database_models import (
+    Base,
+    engine,
+    SessionLocal,
+    Musique,
+    Artiste,
+    GenreMusical,
+    CleMusicale,
+    TypeDeBasse,
+    Group,
+)
+
 # ==============================================================================
 # CLASSE 1: Downloader
 # ==============================================================================
@@ -28,6 +44,52 @@ class Downloader:
     def __init__(self, playlist_file="playlist.txt", download_dir="musics"):
         self.playlist_file = playlist_file
         self.download_dir = download_dir
+
+    def _rename_files(self):
+        """Renomme les fichiers en supprimant le préfixe numérique (ex: '01. ') et supprime les doublons."""
+        download_path = Path(self.download_dir)
+        if not download_path.exists():
+            return
+
+        renamed_count = 0
+
+        # First, rename all files, overwriting if necessary
+        for file_path in download_path.glob("*.mp3"):
+            original_name = file_path.name
+            new_name = re.sub(r'^\d+\.\s*', '', original_name)
+            if new_name != original_name:
+                new_path = file_path.with_name(new_name)
+                try:
+                    if new_path.exists():
+                        new_path.unlink()  # Overwrite existing file
+                    file_path.rename(new_path)
+                    renamed_count += 1
+                except Exception as e:
+                    print(f"[AVERTISSEMENT] Échec du renommage de {original_name}: {e}")
+        
+        # Then, remove duplicates
+        name_to_paths = {}
+        for file_path in download_path.glob("*.mp3"):
+            name = file_path.name
+            if name not in name_to_paths:
+                name_to_paths[name] = []
+            name_to_paths[name].append(file_path)
+        
+        duplicates_removed = 0
+        for name, paths in name_to_paths.items():
+            if len(paths) > 1:
+                # Keep the first, delete the rest
+                for path in paths[1:]:
+                    try:
+                        path.unlink()
+                        duplicates_removed += 1
+                    except Exception as e:
+                        print(f"[AVERTISSEMENT] Échec de suppression du doublon {name}: {e}")
+        
+        if renamed_count > 0:
+            print(f"[INFO] {renamed_count} fichier(s) renommé(s).")
+        if duplicates_removed > 0:
+            print(f"[INFO] {duplicates_removed} doublon(s) supprimé(s).")
 
     def run(self):
         print("\n--- Étape 1: Téléchargement des Playlists ---")
@@ -63,6 +125,7 @@ class Downloader:
             except FileNotFoundError:
                 print("[ERREUR FATALE] La commande 'scdl' est introuvable. Assurez-vous qu'elle est installée et dans le PATH.")
                 return False
+        self._rename_files()
         print("[INFO] Téléchargement terminé.")
         return True
 
@@ -165,177 +228,142 @@ class MusicAnalyzer:
         print(f"[INFO] Analyse terminée. Données exportées dans '{self.output_file}'.")
         return True
 
-# ==============================================================================
-# CLASSE 3: MusicGrouper
-# ==============================================================================
-class MusicGrouper:
-    """
-    Regroupe les musiques par genre, type de basse, clé et BPM.
-    """
-    def __init__(self, input_file="music_data.json", output_file="grouped_music.json"):
-        self.input_file = input_file
-        self.output_file = output_file
-        self.KEY_TO_CAMELOT = {
-            'A Major': '11B', 'F# Minor': '11A', 'E Major': '12B', 'C# Minor': '12A',
-            'B Major': '1B', 'G# Minor': '1A', 'F# Major': '2B', 'D# Minor': '2A',
-            'Gb Major': '2B', 'Eb Minor': '2A', 'C# Major': '3B', 'A# Minor': '3A',
-            'Db Major': '3B', 'Bb Minor': '3A', 'G# Major': '4B', 'F Minor': '4A',
-            'Ab Major': '4B', 'D# Major': '5B', 'C Minor': '5A', 'Eb Major': '5B',
-            'A# Major': '6B', 'G Minor': '6A', 'Bb Major': '6B', 'F Major': '7B',
-            'D Minor': '7A', 'C Major': '8B', 'A Minor': '8A', 'G Major': '9B',
-            'E Minor': '9A', 'D Major': '10B', 'B Minor': '10A',
-        }
 
-    def _are_keys_compatible(self, key1, key2):
-        if key1 not in self.KEY_TO_CAMELOT or key2 not in self.KEY_TO_CAMELOT: return False
-        code1, code2 = self.KEY_TO_CAMELOT[key1], self.KEY_TO_CAMELOT[key2]
-        num1, letter1 = int(code1[:-1]), code1[-1]
-        num2, letter2 = int(code2[:-1]), code2[-1]
-        if num1 == num2: return True
-        if letter1 == letter2 and (abs(num1 - num2) == 1 or {num1, num2} == {1, 12}): return True
-        return False
+# ==============================================================================
+# CLASSE 3: Importer
+# ==============================================================================
+class Importer:
+    """
+    Importe les données de music_data.json dans la base de données.
+    """
+    def __init__(self, music_data_file="music_data.json"):
+        self.music_data_file = music_data_file
 
-    def _get_bass_type(self, punchiness):
+    def _get_or_create_batch(self, session: Session, cache: dict, model, **kwargs):
+        """
+        Récupère une instance depuis le cache ou la DB. Si elle n'existe nulle part,
+        la crée et l'ajoute à la session (sans commit).
+        """
+        # Clé de cache spécifique pour le modèle Group pour éviter les collisions
+        if model.__name__ == 'Group':
+            cache_key = f"Group-{kwargs['nom']}-{kwargs.get('type')}-{kwargs.get('parent_id')}"
+        else:
+            cache_key = f"{model.__name__}-{kwargs['nom']}"
+
+        if cache_key in cache:
+            return cache[cache_key]
+
+        instance = session.query(model).filter_by(**kwargs).first()
+        if instance:
+            cache[cache_key] = instance
+            return instance
+        
+        instance = model(**kwargs)
+        session.add(instance)
+        cache[cache_key] = instance
+        return instance
+
+    def _clean_filename(self, filename):
+        """Supprime le préfixe numérique du nom de fichier."""
+        return re.sub(r'^\d+\.\s*', '', filename)
+
+    def get_bass_type_from_punchiness(self, punchiness):
+        """Détermine le type de basse à partir de la valeur de punchiness."""
         if punchiness < 0.8: return "Basse Douce"
         if 0.8 <= punchiness < 1.5: return "Basse Rythmée"
         return "Basse Agressive"
 
-    def _get_clean_name(self, filename):
-        return re.sub(r'^\d+\.\s*', '', filename)
-
-    def _find_key_clusters(self, track_list):
-        key_clusters_dict = {}
-        unassigned_tracks = list(track_list)
-        cluster_count = 0
-
-        while unassigned_tracks:
-            cluster_count += 1
-            base_track = unassigned_tracks.pop(0)
-            current_key_cluster = [base_track]
-            
-            remaining_after_check = []
-            for other_track in unassigned_tracks:
-                if self._are_keys_compatible(base_track['key'], other_track['key']):
-                    current_key_cluster.append(other_track)
-                else:
-                    remaining_after_check.append(other_track)
-            unassigned_tracks = remaining_after_check
-            
-            # Sub-group by BPM
-            current_key_cluster.sort(key=lambda t: t['bpm'])
-            bpm_groups_list = []
-            if current_key_cluster:
-                temp_bpm_group = [current_key_cluster[0]]
-                for i in range(1, len(current_key_cluster)):
-                    if abs(current_key_cluster[i]['bpm'] - temp_bpm_group[0]['bpm']) <= 10:
-                        temp_bpm_group.append(current_key_cluster[i])
-                    else:
-                        bpm_groups_list.append(temp_bpm_group)
-                        temp_bpm_group = [current_key_cluster[i]]
-                if temp_bpm_group: bpm_groups_list.append(temp_bpm_group)
-
-            bpm_groups_dict = {
-                f"Groupe de BPM {i+1}": [t['file'] for t in g]
-                for i, g in enumerate(bpm_groups_list) if g
-            }
-            if bpm_groups_dict:
-                key_clusters_dict[f"Groupe de Clés {cluster_count}"] = bpm_groups_dict
-        
-        return key_clusters_dict
-        
-    def run(self):
-        print("\n--- Étape 3: Regroupement des Morceaux ---")
+    def importer_donnees_de_base(self, session: Session):
+        """
+        Importe les données de base (Musiques, Artistes, Genres, etc.) depuis music_data.json.
+        """
+        print(f"\n--- Étape 1: Importation des données de base depuis '{self.music_data_file}' ---")
         try:
-            with open(self.input_file, 'r', encoding='utf-8') as f:
-                music_data = json.load(f)
-        except (FileNotFoundError, json.JSONDecodeError):
-            print(f"[ERREUR] Impossible de lire '{self.input_file}'. Exécutez l'analyse d'abord.")
+            with open(self.music_data_file, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError) as e:
+            print(f"[ERREUR] Impossible de lire '{self.music_data_file}': {e}")
             return False
 
-        temp_groups = defaultdict(lambda: defaultdict(list))
-        for track in music_data:
-            temp_groups[track.get("genre", "Inconnu")][self._get_bass_type(track.get("punchiness", 0.0))].append(track)
+        musiques_ajoutees = 0
+        processed_files = set(row[0] for row in session.query(Musique.nom_fichier).all())
+        local_cache = {}
 
-        final_groups = defaultdict(lambda: defaultdict(dict))
-        for genre, bass_groups in temp_groups.items():
-            for bass_type, tracks in bass_groups.items():
-                seen_names = set()
-                unique_tracks = [t for t in tracks if self._get_clean_name(t['file']) not in seen_names and not seen_names.add(self._get_clean_name(t['file']))]
-                
-                if unique_tracks:
-                    final_groups[genre][bass_type] = self._find_key_clusters(unique_tracks)
+        for morceau_data in tqdm(data, desc="Préparation des musiques"):
+            cleaned_filename = self._clean_filename(morceau_data['file'])
+            
+            if cleaned_filename in processed_files:
+                continue
+            
+            processed_files.add(cleaned_filename)
 
-        with open(self.output_file, 'w', encoding='utf-8') as f:
-            json.dump(final_groups, f, indent=4, ensure_ascii=False)
+            artiste = self._get_or_create_batch(session, local_cache, Artiste, nom=morceau_data.get('artist', 'Unknown').strip())
+            genre = self._get_or_create_batch(session, local_cache, GenreMusical, nom=morceau_data.get('genre', 'Unknown').strip())
+            cle_musicale = self._get_or_create_batch(session, local_cache, CleMusicale, nom=morceau_data.get('key', 'Unknown').strip())
+            
+            punch = morceau_data.get('punchiness', 0.0)
+            bass_type_name = self.get_bass_type_from_punchiness(punch)
+            type_de_basse = self._get_or_create_batch(session, local_cache, TypeDeBasse, nom=bass_type_name)
 
-        print(f"[INFO] Regroupement terminé. Données exportées dans '{self.output_file}'.")
+            nouveau_morceau = Musique(
+                nom_fichier=cleaned_filename,
+                bpm=morceau_data.get('bpm'),
+                punchiness=punch,
+                sub_bass_db=morceau_data.get('sub_bass_db'),
+                mid_bass_db=morceau_data.get('mid_bass_db'),
+                artiste=artiste,
+                genre=genre,
+                cle_musicale=cle_musicale,
+                type_de_basse=type_de_basse,
+            )
+            session.add(nouveau_morceau)
+            musiques_ajoutees += 1
+
+        print("Commit des nouvelles musiques...")
+        session.commit()
+        print(f"[INFO] {musiques_ajoutees} nouvelle(s) musique(s) ajoutée(s).")
         return True
 
-# ==============================================================================
-# CLASSE 4: PlaylistOrganizer
-# ==============================================================================
-class PlaylistOrganizer:
-    """
-    Crée une arborescence de dossiers de playlists et y copie les fichiers musicaux.
-    """
-    def __init__(self, source_dir="musics", input_file="grouped_music.json", output_dir="PulseCrafter_Playlists"):
-        self.source_dir = source_dir
-        self.input_file = input_file
-        self.output_dir = output_dir
-
-    def _find_source_files(self):
-        file_map = {}
-        for root, _, files in os.walk(self.source_dir):
-            for file in files:
-                file_map[file] = os.path.join(root, file)
-        return file_map
-
-    def _sanitize_dirname(self, name):
-        return re.sub(r'[<>:"/\\|?*]', '_', name)
-
+    
     def run(self):
-        print("\n--- Étape 4: Organisation des Dossiers de Playlists ---")
-        try:
-            with open(self.input_file, 'r', encoding='utf-8') as f:
-                grouped_data = json.load(f)
-        except (FileNotFoundError, json.JSONDecodeError):
-            print(f"[ERREUR] Impossible de lire '{self.input_file}'. Exécutez le regroupement d'abord.")
-            return False
-
-        source_map = self._find_source_files()
-        if not source_map:
-            print(f"[AVERTISSEMENT] Aucun fichier source trouvé dans '{self.source_dir}'.")
-            return False
-
-        copy_ops = []
-        def collect_ops(data, path_parts):
-            if isinstance(data, dict):
-                for key, value in data.items():
-                    collect_ops(value, path_parts + [self._sanitize_dirname(key)])
-            elif isinstance(data, list):
-                dest_dir = os.path.join(self.output_dir, *path_parts)
-                for filename in data:
-                    if filename in source_map:
-                        copy_ops.append((source_map[filename], os.path.join(dest_dir, filename)))
-                    else:
-                        print(f"  [AVERTISSEMENT] Fichier source introuvable: {filename}")
+        print("\n--- Étape 3: Injection des données dans la base de données ---")
         
-        collect_ops(grouped_data, [])
-
-        if not copy_ops:
-            print("[INFO] Aucune copie de fichier à effectuer.")
-            return True
-
-        print(f"{len(copy_ops)} fichiers à organiser dans '{self.output_dir}'.")
-        for src, dest in tqdm(copy_ops, desc="Copie des fichiers"):
+        # Construit le chemin vers la DB relative au script
+        db_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'DB', 'music_library.db'))
+        
+        if os.path.exists(db_path):
+            # Fermer toutes les connexions à la base de données
+            print("Fermeture des connexions existantes...")
+            engine.dispose()
+            
+            # Attendre un moment pour que les connexions se ferment
+            import time
+            time.sleep(0.1)
+            
+            # Supprimer l'ancienne base de données
             try:
-                os.makedirs(os.path.dirname(dest), exist_ok=True)
-                if not os.path.exists(dest):
-                    shutil.copy2(src, dest)
-            except Exception as e:
-                print(f"\n[ERREUR] Échec de la copie de {src} vers {dest}: {e}")
+                os.remove(db_path)
+                print(f"Ancienne base de données '{db_path}' supprimée pour une reconstruction propre.")
+            except PermissionError as e:
+                print(f"[ERREUR] Impossible de supprimer la base de données: {e}")
+                print("[INFO] Tentative de réinitialisation sans suppression...")
+                # Au lieu de supprimer, on réinitialise les tables
+                Base.metadata.drop_all(bind=engine)
+                print("Tables précédentes supprimées.")
+
+        print("Création de toutes les tables...")
+        Base.metadata.create_all(bind=engine)
+        print("Tables prêtes.")
         
-        print("[INFO] Organisation des playlists terminée.")
+        db = SessionLocal()
+        
+        try:
+            if not self.importer_donnees_de_base(db):
+                return False
+        finally:
+            db.close()
+
+        print("[INFO] Injection des données terminée.")
         return True
 
 # ==============================================================================
@@ -352,22 +380,21 @@ def main():
     parser.add_argument(
         '--steps', 
         nargs='+', 
-        choices=['download', 'analyze', 'group', 'organize', 'all'],
+        choices=['download', 'analyze', 'import', 'all'],
         default=['all'],
         help='''Spécifiez les étapes à exécuter:
   - download: Télécharge les playlists depuis playlist.txt.
   - analyze: Analyse les fichiers audio pour créer music_data.json.
-  - group: Regroupe les musiques depuis music_data.json dans grouped_music.json.
-  - organize: Copie les fichiers dans une nouvelle arborescence de dossiers.
+  - import: Importe les données dans la base de données.
   - all: Exécute toutes les étapes (par défaut).'''
     )
     args = parser.parse_args()
     steps_to_run = args.steps
     
     if 'all' in steps_to_run:
-        steps_to_run = ['download', 'analyze', 'group', 'organize']
+        steps_to_run = ['download', 'analyze', 'import']
 
-    print("🚀 Démarrage de PulseCrafter 🚀")
+    print(">>> Demarrage de PulseCrafter >>")
     
     if 'download' in steps_to_run:
         downloader = Downloader()
@@ -379,16 +406,12 @@ def main():
         if not analyzer.run():
             if not _confirm_continue(): sys.exit(1)
 
-    if 'group' in steps_to_run:
-        grouper = MusicGrouper()
-        if not grouper.run():
+    if 'import' in steps_to_run:
+        importer = Importer()
+        if not importer.run():
             if not _confirm_continue(): sys.exit(1)
-
-    if 'organize' in steps_to_run:
-        organizer = PlaylistOrganizer()
-        organizer.run()
         
-    print("\n🎉 PulseCrafter a terminé son travail! 🎉")
+    print("\n[SUCCESS] PulseCrafter a termine son travail!")
 
 def _confirm_continue():
     """Demande à l'utilisateur s'il veut continuer malgré une erreur."""

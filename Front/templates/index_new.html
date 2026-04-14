@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PulseCrafter</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/wavesurfer.js"></script>
+    <style>
+        body {
+            background: radial-gradient(circle at top left, rgba(59, 130, 246, 0.18), transparent 20%),
+                        radial-gradient(circle at bottom right, rgba(16, 185, 129, 0.16), transparent 18%),
+                        #050816;
+            min-height: 100vh;
+        }
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.8); }
+        ::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.6); border-radius: 9999px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(148, 163, 184, 0.8); }
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.72);
+            backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+        }
+        .glass-panel-strong {
+            background: rgba(15, 23, 42, 0.88);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+        .hover-card {
+            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+        }
+        .hover-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 24px 70px rgba(15, 23, 42, 0.35);
+            border-color: rgba(59, 130, 246, 0.25);
+        }
+        .smooth-transition {
+            transition: all 0.25s ease;
+        }
+        .modern-btn {
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+        }
+        .modern-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 12px 24px rgba(59, 130, 246, 0.22);
+        }
+        .table-row {
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+        .nav-tab {
+            transition: all 0.2s ease;
+        }
+        .nav-tab.active {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: rgba(59, 130, 246, 0.5);
+        }
+        .collection-item, .template-item {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .collection-item:hover, .template-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+        .timeline-visualization {
+            min-height: 200px;
+        }
+        .energy-curve {
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+    </style>
+</head>
+<body class="text-white">
+    <!-- Navigation -->
+    <nav class="glass-panel mx-4 mt-4 rounded-2xl p-4">
+        <div class="flex space-x-1">
+            <button id="nav-musiques" class="nav-tab px-6 py-3 rounded-xl border border-transparent text-gray-300 hover:text-white hover:bg-white/10 transition" data-tab="musiques">Musiques</button>
+            <button id="nav-collections" class="nav-tab px-6 py-3 rounded-xl border border-transparent text-gray-300 hover:text-white hover:bg-white/10 transition" data-tab="collections">Collections</button>
+            <button id="nav-timeline" class="nav-tab px-6 py-3 rounded-xl border border-transparent text-gray-300 hover:text-white hover:bg-white/10 transition" data-tab="timeline">Timeline</button>
+            <button id="nav-templates" class="nav-tab px-6 py-3 rounded-xl border border-transparent text-gray-300 hover:text-white hover:bg-white/10 transition" data-tab="templates">Templates</button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="mx-4 mt-4 space-y-6">
+        <!-- Musiques View -->
+        <div id="musiques-view" class="view-section">
+            <div class="glass-panel rounded-2xl p-6">
+                <h2 class="text-2xl font-bold mb-6">Bibliothèque Musicale</h2>
+                
+                <!-- Filters -->
+                <div class="music-filter-panel mb-6">
+                    <div class="music-filter-row">
+                        <div class="filter-group">
+                            <label class="filter-label">Champ</label>
+                            <select id="filter-field" class="filter-control">
+                                <option value="nom_fichier">Titre</option>
+                                <option value="bpm">BPM</option>
+                                <option value="punchiness">Punchiness</option>
+                                <option value="artiste">Artiste</option>
+                                <option value="genre">Genre</option>
+                                <option value="cle_musicale">Clé musicale</option>
+                                <option value="type_de_basse">Type de basse</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Opérateur</label>
+                            <select id="filter-operator" class="filter-control">
+                                <option value="contains">Contient</option>
+                                <option value="equals">Égale</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Valeur</label>
+                            <input type="text" id="filter-value" class="filter-control" placeholder="Valeur à filtrer">
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Mode</label>
+                            <select id="filter-join-mode" class="filter-control">
+                                <option value="AND">ET</option>
+                                <option value="OR">OU</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="filter-actions">
+                        <button id="add-filter-btn" class="btn-primary">Ajouter</button>
+                        <button id="apply-filters-btn" class="btn-secondary">Appliquer</button>
+                        <button id="reset-filters-btn" class="btn-secondary">Réinitialiser</button>
+                    </div>
+                </div>
+
+                <!-- Active Filters -->
+                <div id="active-filter-chips" class="mb-4">
+                    <span class="text-gray-400">Aucun critère actif.</span>
+                </div>
+
+                <!-- Music Table -->
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b border-gray-600">
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                    <button class="flex items-center space-x-1 hover:text-white" data-sort="id">
+                                        <span>ID</span>
+                                        <span class="sort-icon invisible">↑</span>
+                                    </button>
+                                </th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                    <button class="flex items-center space-x-1 hover:text-white" data-sort="nom_fichier">
+                                        <span>Titre</span>
+                                        <span class="sort-icon invisible">↑</span>
+                                    </button>
+                                </th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                    <button class="flex items-center space-x-1 hover:text-white" data-sort="bpm">
+                                        <span>BPM</span>
+                                        <span class="sort-icon invisible">↑</span>
+                                    </button>
+                                </th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                    <button class="flex items-center space-x-1 hover:text-white" data-sort="punchiness">
+                                        <span>Punchiness</span>
+                                        <span class="sort-icon invisible">↑</span>
+                                    </button>
+                                </th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Artiste</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Genre</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Clé</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Basse</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="music-table-body">
+                            <!-- Music rows will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Counter -->
+                <div id="music-counter" class="mt-4 text-sm text-gray-400">
+                    Chargement...
+                </div>
+            </div>
+        </div>
+
+        <!-- Collections View -->
+        <div id="collections-view" class="view-section hidden">
+            <div class="glass-panel rounded-2xl p-6">
+                <h2 class="text-2xl font-bold mb-6">Collections</h2>
+                
+                <!-- Add Collection Form -->
+                <form id="add-collection-form" class="mb-6 glass-panel-strong rounded-xl p-4">
+                    <h3 class="text-lg font-semibold mb-4">Nouvelle Collection</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="filter-label">Nom</label>
+                            <input type="text" id="collection-name" class="filter-control" required>
+                        </div>
+                        <div>
+                            <label class="filter-label">Description</label>
+                            <input type="text" id="collection-description" class="filter-control">
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <button type="submit" class="modern-btn bg-sky-500 hover:bg-sky-400 text-white px-6 py-2 rounded-full">Créer</button>
+                    </div>
+                </form>
+
+                <!-- Collections List -->
+                <div id="collections-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Collections will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Timeline View -->
+        <div id="timeline-view" class="view-section hidden">
+            <div class="glass-panel rounded-2xl p-6">
+                <div id="timeline-container">
+                    <!-- Timeline content will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Templates View -->
+        <div id="templates-view" class="view-section hidden">
+            <div class="glass-panel rounded-2xl p-6">
+                <h2 class="text-2xl font-bold mb-6">Templates de Set</h2>
+                
+                <!-- Add Template Form -->
+                <form id="add-template-form" class="mb-6 glass-panel-strong rounded-xl p-4">
+                    <h3 class="text-lg font-semibold mb-4">Nouveau Template</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div>
+                            <label class="filter-label">Nom</label>
+                            <input type="text" id="template-name" class="filter-control" required>
+                        </div>
+                        <div>
+                            <label class="filter-label">Nombre de titres</label>
+                            <input type="number" id="template-track-count" class="filter-control" min="1" required>
+                        </div>
+                        <div>
+                            <label class="filter-label">BPM début</label>
+                            <input type="number" id="template-start-bpm" class="filter-control" min="60" max="200" required>
+                        </div>
+                        <div>
+                            <label class="filter-label">BPM fin</label>
+                            <input type="number" id="template-end-bpm" class="filter-control" min="60" max="200" required>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="filter-label">Genres (séparés par des virgules)</label>
+                            <input type="text" id="template-genres" class="filter-control" placeholder="techno, house, trance">
+                        </div>
+                        <div class="md:col-span-3">
+                            <label class="filter-label">Description</label>
+                            <textarea id="template-description" class="filter-control" rows="2"></textarea>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <button type="submit" class="modern-btn bg-sky-500 hover:bg-sky-400 text-white px-6 py-2 rounded-full">Créer</button>
+                    </div>
+                </form>
+
+                <!-- Templates List -->
+                <div id="templates-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Templates will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+    let allMusics = [];
+    
+    // Load music data via AJAX
+    async function loadMusicData() {
+        try {
+            console.log('DEBUG: Starting AJAX load of music data');
+            const response = await fetch('/api/musics');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            allMusics = await response.json();
+            console.log('DEBUG: AJAX load successful, allMusics length:', allMusics.length);
+            console.log('DEBUG: First music sample:', allMusics.length > 0 ? allMusics[0] : 'no data');
+            
+            // Initialize the application now that data is loaded
+            initializeApplication();
+        } catch (e) {
+            console.error('DEBUG: Error loading music data via AJAX:', e);
+            allMusics = [];
+        }
+    }
+    
+    function initializeApplication() {
+        console.log('DEBUG: Initializing application with', allMusics.length, 'musics');
+        
+        // Initialize all features
+        initializeTabNavigation();
+        initializeCollections();
+        initializeTimeline();
+        initializeTemplates();
+        
+        // Initialize existing functionality if data is available
+        if (allMusics && allMusics.length > 0) {
+            initializeMusicTable();
+            initializeFilters();
+        }
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('DEBUG: DOMContentLoaded fired');
+        // Load data first, then initialize
+        loadMusicData();
+    });
+
+    // ===== TAB NAVIGATION =====
+    function initializeTabNavigation() {
+        const tabs = document.querySelectorAll('.nav-tab');
+        const views = document.querySelectorAll('[id$="-view"]');
+        
+        console.log('DEBUG: Found', tabs.length, 'tabs and', views.length, 'views');
+        
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                console.log('DEBUG: Tab clicked:', tab.id, '->', tab.dataset.tab);
+                
+                // Remove active class from all tabs
+                tabs.forEach(t => t.classList.remove('active'));
+                // Add active class to clicked tab
+                tab.classList.add('active');
+                
+                // Hide all views
+                views.forEach(view => view.classList.add('hidden'));
+                
+                // Show the corresponding view
+                const targetViewId = tab.dataset.tab + '-view';
+                const targetView = document.getElementById(targetViewId);
+                if (targetView) {
+                    targetView.classList.remove('hidden');
+                    console.log('DEBUG: Showing view:', targetViewId);
+                } else {
+                    console.log('DEBUG: View not found:', targetViewId);
+                }
+            });
+        });
+        
+        // Set default active tab (musiques)
+        const defaultTab = document.getElementById('nav-musiques');
+        if (defaultTab) {
+            defaultTab.click();
+        }
+    }
+    
+    // ===== COLLECTIONS MANAGEMENT =====
+    function initializeCollections() {
+        console.log('DEBUG: Initializing collections');
+        
+        // Load collections from localStorage
+        let collections = JSON.parse(localStorage.getItem('pulseCrafterCollections') || '[]');
+        
+        function saveCollections() {
+            localStorage.setItem('pulseCrafterCollections', JSON.stringify(collections));
+        }
+        
+        function renderCollections() {
+            const container = document.getElementById('collections-list');
+            if (!container) return;
+            
+            container.innerHTML = collections.map(collection => `
+                <div class="collection-item glass-panel p-4 rounded-lg">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-lg font-semibold text-white">${collection.name}</h3>
+                        <button class="delete-collection-btn px-2 py-1 bg-red-600 hover:bg-red-500 text-white text-xs rounded" data-id="${collection.id}">Supprimer</button>
+                    </div>
+                    <p class="text-gray-300 text-sm mb-2">${collection.description || 'Aucune description'}</p>
+                    <div class="text-xs text-gray-400">${collection.tracks.length} titre${collection.tracks.length !== 1 ? 's' : ''}</div>
+                </div>
+            `).join('');
+            
+            // Attach delete listeners
+            document.querySelectorAll('.delete-collection-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = e.target.dataset.id;
+                    collections = collections.filter(c => c.id !== id);
+                    saveCollections();
+                    renderCollections();
+                });
+            });
+        }
+        
+        // Add collection form
+        const addForm = document.getElementById('add-collection-form');
+        if (addForm) {
+            addForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const name = document.getElementById('collection-name').value.trim();
+                const description = document.getElementById('collection-description').value.trim();
+                
+                if (name) {
+                    collections.push({
+                        id: Date.now().toString(),
+                        name,
+                        description,
+                        tracks: []
+                    });
+                    saveCollections();
+                    renderCollections();
+                    addForm.reset();
+                }
+            });
+        }
+        
+        renderCollections();
+    }
+    
+    // ===== TIMELINE MANAGEMENT =====
+    function initializeTimeline() {
+        console.log('DEBUG: Initializing timeline');
+        
+        const timelineContainer = document.getElementById('timeline-container');
+        if (!timelineContainer) return;
+        
+        // Create timeline visualization
+        timelineContainer.innerHTML = `
+            <div class="timeline-header mb-4">
+                <h3 class="text-xl font-bold text-white mb-2">Énergie du Set</h3>
+                <div class="flex gap-2 mb-4">
+                    <input type="number" id="timeline-duration" placeholder="Durée (min)" class="filter-control" style="width: 120px;">
+                    <button id="generate-timeline" class="modern-btn bg-sky-500 hover:bg-sky-400 text-white px-4 py-2 rounded-full">Générer</button>
+                </div>
+            </div>
+            <div id="timeline-visualization" class="timeline-visualization">
+                <div class="text-center text-gray-400 py-8">
+                    Configurez la durée et cliquez sur "Générer" pour voir l'énergie du set
+                </div>
+            </div>
+        `;
+        
+        document.getElementById('generate-timeline').addEventListener('click', () => {
+            const duration = parseInt(document.getElementById('timeline-duration').value);
+            if (duration && duration > 0) {
+                generateTimelineVisualization(duration);
+            }
+        });
+    }
+    
+    function generateTimelineVisualization(duration) {
+        const container = document.getElementById('timeline-visualization');
+        
+        // Generate sample energy curve (sine wave with some variation)
+        const points = [];
+        for (let i = 0; i <= duration; i++) {
+            const baseEnergy = Math.sin(i / duration * Math.PI * 2) * 0.5 + 0.5;
+            const variation = (Math.random() - 0.5) * 0.2;
+            points.push(Math.max(0, Math.min(1, baseEnergy + variation)));
+        }
+        
+        container.innerHTML = `
+            <div class="energy-curve relative">
+                <svg width="100%" height="200" viewBox="0 0 ${duration * 10} 100" class="border border-gray-600 rounded">
+                    <polyline 
+                        fill="none" 
+                        stroke="#0ea5e9" 
+                        stroke-width="2" 
+                        points="${points.map((p, i) => `${i * 10},${100 - p * 80}`).join(' ')}"
+                    />
+                    <line x1="0" y1="20" x2="${duration * 10}" y2="20" stroke="#374151" stroke-width="1" stroke-dasharray="2,2"/>
+                    <text x="5" y="15" fill="#9ca3af" font-size="10">Élevé</text>
+                    <line x1="0" y1="80" x2="${duration * 10}" y2="80" stroke="#374151" stroke-width="1" stroke-dasharray="2,2"/>
+                    <text x="5" y="75" fill="#9ca3af" font-size="10">Moyen</text>
+                </svg>
+                <div class="flex justify-between text-xs text-gray-400 mt-2">
+                    <span>0 min</span>
+                    <span>${duration} min</span>
+                </div>
+            </div>
+        `;
+    }
+    
+    // ===== TEMPLATES MANAGEMENT =====
+    function initializeTemplates() {
+        console.log('DEBUG: Initializing templates');
+        
+        // Load templates from localStorage
+        let templatesData = JSON.parse(localStorage.getItem('pulseCrafterTemplates') || '{"templates": []}');
+        
+        function saveTemplates() {
+            localStorage.setItem('pulseCrafterTemplates', JSON.stringify(templatesData));
+        }
+        
+        function renderTemplates() {
+            const container = document.getElementById('templates-list');
+            if (!container) return;
+            
+            container.innerHTML = templatesData.templates.map(template => `
+                <div class="template-item glass-panel p-4 rounded-lg">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-lg font-semibold text-white">${template.name}</h3>
+                        <div class="flex gap-2">
+                            <button class="use-template-btn px-3 py-1 bg-green-600 hover:bg-green-500 text-white text-xs rounded" data-id="${template.id}">Utiliser</button>
+                            <button class="edit-template-btn px-3 py-1 bg-yellow-600 hover:bg-yellow-500 text-white text-xs rounded" data-id="${template.id}">Éditer</button>
+                            <button class="delete-template-btn px-3 py-1 bg-red-600 hover:bg-red-500 text-white text-xs rounded" data-id="${template.id}">Supprimer</button>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 text-sm mb-2">${template.description || 'Aucune description'}</p>
+                    <div class="text-xs text-gray-400">
+                        ${template.trackCount} titres • BPM ${template.startBPM} → ${template.endBPM} • ${template.genres.join(', ')}
+                    </div>
+                </div>
+            `).join('');
+            
+            // Attach event listeners
+            document.querySelectorAll('.use-template-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => useTemplate(e.target.dataset.id));
+            });
+            
+            document.querySelectorAll('.edit-template-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => editTemplate(e.target.dataset.id));
+            });
+            
+            document.querySelectorAll('.delete-template-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = e.target.dataset.id;
+                    templatesData.templates = templatesData.templates.filter(t => t.id !== id);
+                    saveTemplates();
+                    renderTemplates();
+                });
+            });
+        }
+        
+        // Add template form
+        const addForm = document.getElementById('add-template-form');
+        if (addForm) {
+            addForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const name = document.getElementById('template-name').value.trim();
+                const description = document.getElementById('template-description').value.trim();
+                const trackCount = parseInt(document.getElementById('template-track-count').value);
+                const startBPM = parseInt(document.getElementById('template-start-bpm').value);
+                const endBPM = parseInt(document.getElementById('template-end-bpm').value);
+                const genres = document.getElementById('template-genres').value.split(',').map(g => g.trim()).filter(Boolean);
+                
+                if (name && trackCount && startBPM && endBPM) {
+                    templatesData.templates.push({
+                        id: Date.now().toString(),
+                        name,
+                        description,
+                        trackCount,
+                        startBPM,
+                        endBPM,
+                        genres
+                    });
+                    saveTemplates();
+                    renderTemplates();
+                    addForm.reset();
+                }
+            });
+        }
+        
+        renderTemplates();
+    }
+    
+    function useTemplate(templateId) {
+        const template = templatesData.templates.find(t => t.id === templateId);
+        if (template) {
+            alert(`✓ Utilisation du template: ${template.name}\nChargement de ${template.trackCount} musiques avec BPM ${template.startBPM} → ${template.endBPM}`);
+            // Future: Auto-generate playlist from template
+        }
+    }
+    
+    function editTemplate(templateId) {
+        // Future: Implement template editing
+        alert('Fonction d\'édition à implémenter');
+    }
+
+    // ===== MUSIC TABLE AND FILTERS =====
+    function initializeMusicTable() {
+        console.log('DEBUG: Initializing music table');
+        
+        const musicTableBody = document.getElementById('music-table-body');
+        const musicCounter = document.getElementById('music-counter');
+        
+        if (!musicTableBody || !allMusics || allMusics.length === 0) {
+            console.log('DEBUG: No music data or table element found');
+            return;
+        }
+        
+        // Render initial table
+        renderTable(allMusics);
+        updateCounter(allMusics.length);
+    }
+    
+    function initializeFilters() {
+        console.log('DEBUG: Initializing filters');
+        
+        const filterField = document.getElementById('filter-field');
+        const filterOperator = document.getElementById('filter-operator');
+        const filterValue = document.getElementById('filter-value');
+        const filterJoinMode = document.getElementById('filter-join-mode');
+        const addFilterBtn = document.getElementById('add-filter-btn');
+        const applyFiltersBtn = document.getElementById('apply-filters-btn');
+        const resetFiltersBtn = document.getElementById('reset-filters-btn');
+        
+        let activeCriteria = [];
+        let sortState = { field: '', direction: 'asc' };
+        
+        const FILTER_LABELS = {
+            id: 'ID',
+            nom_fichier: 'Titre',
+            bpm: 'BPM',
+            punchiness: 'Punchiness',
+            artiste: 'Artiste',
+            genre: 'Genre',
+            cle_musicale: 'Clé musicale',
+            type_de_basse: 'Type de basse'
+        };
+        
+        const FILTER_OPERATORS = {
+            string: [
+                { value: 'contains', label: 'Contient' },
+                { value: 'equals', label: 'Égale' }
+            ],
+            numeric: [
+                { value: '>=', label: '≥' },
+                { value: '<=', label: '≤' },
+                { value: '>', label: '>' },
+                { value: '<', label: '<' },
+                { value: '=', label: '=' }
+            ]
+        };
+        
+        function isNumericField(field) {
+            return ['bpm', 'punchiness', 'id'].includes(field);
+        }
+        
+        function getOperatorOptions(field) {
+            return isNumericField(field) ? FILTER_OPERATORS.numeric : FILTER_OPERATORS.string;
+        }
+        
+        function populateOperatorOptions() {
+            const options = getOperatorOptions(filterField.value);
+            filterOperator.innerHTML = options.map(op => `<option value="${op.value}">${op.label}</option>`).join('');
+        }
+        
+        function addFilterCriterion() {
+            const field = filterField.value;
+            const operator = filterOperator.value;
+            const rawValue = filterValue.value.trim();
+            const values = rawValue.split(',').map(item => item.trim()).filter(Boolean);
+            
+            if (!field || !operator || values.length === 0) {
+                return;
+            }
+            
+            activeCriteria.push({ field, operator, values });
+            filterValue.value = '';
+            renderFilterCriteria();
+            applyFilters();
+        }
+        
+        function operatorLabel(operator) {
+            const allOps = [...FILTER_OPERATORS.numeric, ...FILTER_OPERATORS.string];
+            const op = allOps.find(o => o.value === operator);
+            return op ? op.label : operator;
+        }
+        
+        function renderFilterCriteria() {
+            const chipsContainer = document.getElementById('active-filter-chips');
+            if (!chipsContainer) return;
+            
+            if (activeCriteria.length === 0) {
+                chipsContainer.innerHTML = '<span class="text-gray-400">Aucun critère actif.</span>';
+                return;
+            }
+            
+            chipsContainer.innerHTML = activeCriteria.map((criterion, index) => `
+                <span class="filter-chip inline-flex items-center px-3 py-1 rounded-full text-sm bg-sky-500/20 text-sky-300 border border-sky-500/30 mr-2 mb-2">
+                    ${FILTER_LABELS[criterion.field]} ${operatorLabel(criterion.operator)} ${criterion.values.join(', ')}
+                    <button type="button" class="ml-2 text-sky-300 hover:text-white" onclick="removeFilterCriterion(${index})">&times;</button>
+                </span>
+            `).join('');
+        }
+        
+        function removeFilterCriterion(index) {
+            activeCriteria.splice(index, 1);
+            renderFilterCriteria();
+            applyFilters();
+        }
+        
+        function applyFilters() {
+            if (!allMusics || allMusics.length === 0) return;
+            
+            let filtered = [...allMusics];
+            
+            if (activeCriteria.length > 0) {
+                const joinMode = filterJoinMode.value;
+                
+                filtered = filtered.filter(music => {
+                    const results = activeCriteria.map(criterion => {
+                        const field = criterion.field;
+                        const operator = criterion.operator;
+                        const values = criterion.values;
+                        
+                        let musicValue = music[field];
+                        if (typeof musicValue === 'object' && musicValue !== null) {
+                            musicValue = musicValue.nom || musicValue;
+                        }
+                        
+                        if (isNumericField(field)) {
+                            const numValue = parseFloat(musicValue);
+                            if (isNaN(numValue)) return false;
+                            
+                            return values.some(val => {
+                                const numVal = parseFloat(val);
+                                if (isNaN(numVal)) return false;
+                                
+                                switch (operator) {
+                                    case '>=': return numValue >= numVal;
+                                    case '<=': return numValue <= numVal;
+                                    case '>': return numValue > numVal;
+                                    case '<': return numValue < numVal;
+                                    case '=': return numValue === numVal;
+                                    default: return false;
+                                }
+                            });
+                        } else {
+                            const strValue = String(musicValue).toLowerCase();
+                            return values.some(val => {
+                                const lowerVal = val.toLowerCase();
+                                if (operator === 'contains') {
+                                    return strValue.includes(lowerVal);
+                                } else if (operator === 'equals') {
+                                    return strValue === lowerVal;
+                                }
+                                return false;
+                            });
+                        }
+                    });
+                    
+                    return joinMode === 'OR' ? results.some(r => r) : results.every(r => r);
+                });
+            }
+            
+            renderTable(filtered);
+            updateCounter(filtered.length);
+        }
+        
+        function resetFilters() {
+            activeCriteria = [];
+            renderFilterCriteria();
+            applyFilters();
+        }
+        
+        function setSortField(field) {
+            if (sortState.field === field) {
+                sortState.direction = sortState.direction === 'asc' ? 'desc' : 'asc';
+            } else {
+                sortState.field = field;
+                sortState.direction = 'asc';
+            }
+            updateSortIndicators();
+            applyFilters();
+        }
+        
+        function updateSortIndicators() {
+            document.querySelectorAll('th[data-sort]').forEach(header => {
+                const field = header.dataset.sort;
+                const icon = header.querySelector('.sort-icon');
+                if (field === sortState.field) {
+                    icon.textContent = sortState.direction === 'asc' ? '↑' : '↓';
+                    icon.classList.remove('invisible');
+                } else {
+                    icon.classList.add('invisible');
+                }
+            });
+        }
+        
+        function renderTable(musics) {
+            const musicTableBody = document.getElementById('music-table-body');
+            if (!musicTableBody) return;
+            
+            const sortedMusics = [...musics].sort((a, b) => {
+                let aVal = a[sortState.field];
+                let bVal = b[sortState.field];
+                
+                if (typeof aVal === 'object' && aVal !== null) aVal = aVal.nom || aVal;
+                if (typeof bVal === 'object' && bVal !== null) bVal = bVal.nom || bVal;
+                
+                if (isNumericField(sortState.field)) {
+                    aVal = parseFloat(aVal) || 0;
+                    bVal = parseFloat(bVal) || 0;
+                } else {
+                    aVal = String(aVal).toLowerCase();
+                    bVal = String(bVal).toLowerCase();
+                }
+                
+                if (aVal < bVal) return sortState.direction === 'asc' ? -1 : 1;
+                if (aVal > bVal) return sortState.direction === 'asc' ? 1 : -1;
+                return 0;
+            });
+            
+            musicTableBody.innerHTML = sortedMusics.map(music => `
+                <tr class="table-row hover:bg-gray-700/50">
+                    <td class="px-4 py-3 text-sm text-gray-300">${music.id}</td>
+                    <td class="px-4 py-3 text-sm text-gray-300 max-w-xs truncate" title="${music.nom_fichier}">${music.nom_fichier}</td>
+                    <td class="px-4 py-3 text-sm text-gray-300">${music.bpm}</td>
+                    <td class="px-4 py-3 text-sm text-gray-300">${music.punchiness.toFixed(2)}</td>
+                    <td class="px-4 py-3 text-sm text-gray-300">${music.artiste.nom}</td>
+                    <td class="px-4 py-3 text-sm text-gray-300">${music.genre.nom}</td>
+                    <td class="px-4 py-3 text-sm text-gray-300">${music.cle_musicale.nom}</td>
+                    <td class="px-4 py-3 text-sm text-gray-300">${music.type_de_basse.nom}</td>
+                    <td class="px-4 py-3 text-sm">
+                        <button class="play-btn px-3 py-1 bg-sky-600 hover:bg-sky-500 text-white text-xs rounded-full">▶️</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+        
+        function updateCounter(count) {
+            const counterEl = document.getElementById('music-counter');
+            if (counterEl) {
+                counterEl.textContent = `${count} musique${count !== 1 ? 's' : ''} affichée${count !== 1 ? 's' : ''}`;
+            }
+        }
+        
+        // Initialize filter controls
+        populateOperatorOptions();
+        filterField.addEventListener('change', populateOperatorOptions);
+        addFilterBtn.addEventListener('click', addFilterCriterion);
+        applyFiltersBtn.addEventListener('click', applyFilters);
+        resetFiltersBtn.addEventListener('click', resetFilters);
+        
+        document.querySelectorAll('th[data-sort]').forEach(header => {
+            header.addEventListener('click', () => setSortField(header.dataset.sort));
+        });
+        
+        updateSortIndicators();
+        renderFilterCriteria();
+    }
+    
+    // Make removeFilterCriterion global so it can be called from HTML
+    window.removeFilterCriterion = function(index) {
+        // This will be overridden by the initializeFilters function
+    };
+
+    </script>
+</body>
+</html>
