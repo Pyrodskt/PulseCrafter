@@ -275,37 +275,41 @@ def add_log(message, level="INFO"):
     log_msg = f"[{timestamp}] {level}: {message}"
     with pipeline_logs_lock:
         pipeline_logs.append(log_msg)
-    print(log_msg)
+    print(log_msg, flush=True)
 
 def run_pulsecrafter_step(step):
-    """Exécute une étape de PulseCrafter."""
+    """Exécute une étape de PulseCrafter en diffusant les logs en temps réel."""
     try:
         core_dir = os.path.join(os.path.dirname(__file__), '..', 'Core')
         script_path = os.path.join(core_dir, 'PulseCrafter.py')
-        
+
         add_log(f"Démarrage de l'étape: {step}")
-        
-        result = subprocess.run(
-            [sys.executable, script_path, '--steps', step],
+
+        process = subprocess.Popen(
+            [sys.executable, '-u', script_path, '--steps', step],
             cwd=core_dir,
-            capture_output=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
             text=True,
             encoding='utf-8',
-            errors='replace'
+            errors='replace',
+            bufsize=1
         )
-        
-        if result.stdout:
-            for line in result.stdout.split('\n'):
-                if line.strip():
-                    add_log(line)
-        
-        if result.returncode != 0:
-            if result.stderr:
-                for line in result.stderr.split('\n'):
-                    if line.strip():
-                        add_log(line, "ERROR")
+
+        if process.stdout:
+            for raw_line in iter(process.stdout.readline, ''):
+                line = raw_line.strip()
+                if line:
+                    lower_line = line.lower()
+                    level = "ERROR" if any(token in lower_line for token in ["erreur", "error", "traceback"]) else "INFO"
+                    add_log(line, level)
+            process.stdout.close()
+
+        return_code = process.wait()
+        if return_code != 0:
+            add_log(f"L'étape {step} s'est terminée avec le code {return_code}.", "ERROR")
             return False
-        
+
         return True
     except Exception as e:
         add_log(f"Erreur lors de l'exécution de {step}: {str(e)}", "ERROR")

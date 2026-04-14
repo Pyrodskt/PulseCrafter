@@ -10,6 +10,7 @@ import logging
 import argparse
 import subprocess
 from pathlib import Path
+from urllib.parse import urlparse, unquote
 from collections import defaultdict
 from tqdm import tqdm
 import librosa
@@ -44,6 +45,47 @@ class Downloader:
     def __init__(self, playlist_file="playlist.txt", download_dir="musics"):
         self.playlist_file = playlist_file
         self.download_dir = download_dir
+
+    def _extract_playlist_name_from_url(self, url):
+        """Construit un nom de playlist lisible à partir de l'URL."""
+        parsed = urlparse(url)
+        path_parts = [part for part in parsed.path.split('/') if part]
+        if not path_parts:
+            return url
+
+        raw_name = path_parts[-1]
+        cleaned_name = unquote(raw_name).replace('-', ' ').replace('_', ' ').strip()
+        return cleaned_name or url
+
+    def _get_playlist_metadata(self, url):
+        """Récupère le nom et le nombre de titres d'une playlist sans télécharger les fichiers."""
+        playlist_name = self._extract_playlist_name_from_url(url)
+        track_count = None
+
+        try:
+            from yt_dlp import YoutubeDL
+
+            with YoutubeDL({
+                'quiet': True,
+                'no_warnings': True,
+                'extract_flat': True,
+                'skip_download': True,
+                'ignoreerrors': True,
+            }) as ydl:
+                info = ydl.extract_info(url, download=False)
+
+            if info:
+                playlist_name = info.get('title') or info.get('playlist_title') or playlist_name
+
+                entries = info.get('entries')
+                if isinstance(entries, list):
+                    track_count = len([entry for entry in entries if entry])
+                elif info.get('playlist_count') is not None:
+                    track_count = int(info['playlist_count'])
+        except Exception:
+            pass
+
+        return playlist_name, track_count
 
     def _rename_files(self):
         """Renomme les fichiers en supprimant le préfixe numérique (ex: '01. ') et supprime les doublons."""
@@ -92,42 +134,68 @@ class Downloader:
             print(f"[INFO] {duplicates_removed} doublon(s) supprimé(s).")
 
     def run(self):
-        print("\n--- Étape 1: Téléchargement des Playlists ---")
+        print("\n--- Étape 1: Téléchargement des Playlists ---", flush=True)
         playlist_path = Path(self.playlist_file)
         download_path = Path(self.download_dir)
         download_path.mkdir(exist_ok=True)
 
         if not playlist_path.exists():
-            print(f"[AVERTISSEMENT] Fichier de playlists '{self.playlist_file}' introuvable. Étape de téléchargement ignorée.")
+            print(f"[AVERTISSEMENT] Fichier de playlists '{self.playlist_file}' introuvable. Étape de téléchargement ignorée.", flush=True)
             return False
 
         with playlist_path.open("r", encoding="utf-8") as f:
             playlists = [line.strip() for line in f if line.strip() and not line.strip().startswith("#")]
 
         if not playlists:
-            print("[INFO] Aucune playlist à télécharger.")
+            print("[INFO] Aucune playlist à télécharger.", flush=True)
             return False
 
-        print(f"[INFO] {len(playlists)} playlist(s) à télécharger dans '{self.download_dir}'.")
-        for idx, url in enumerate(playlists):
-            print(f"  -> Téléchargement [{idx + 1}/{len(playlists)}]: {url}")
+        total_playlists = len(playlists)
+        succes_count = 0
+
+        print(f"[INFO] {total_playlists} playlist(s) à télécharger dans '{self.download_dir}'.", flush=True)
+        for idx, url in enumerate(playlists, start=1):
+            playlist_name, track_count = self._get_playlist_metadata(url)
+            if track_count is not None:
+                print(
+                    f"[INFO] Playlist {idx}/{total_playlists} en cours : {playlist_name} - {track_count} musique(s) à télécharger.",
+                    flush=True
+                )
+            else:
+                print(
+                    f"[INFO] Playlist {idx}/{total_playlists} en cours : {playlist_name} - nombre de musiques indisponible.",
+                    flush=True
+                )
+
+            files_before = len(list(download_path.glob("*.mp3")))
             try:
                 subprocess.run(
                     [
                         "scdl", "-l", url, "--path", str(download_path), "--onlymp3",
-                        "--hide-progress", "--no-playlist-folder", "--original-name",
+                        "--no-playlist-folder", "--original-name",
                         "--hidewarnings", "--no-original"
                     ],
-                    stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, check=True
+                    text=True,
+                    check=True,
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL
+                )
+                files_after = len(list(download_path.glob("*.mp3")))
+                nouveaux_fichiers = max(files_after - files_before, 0)
+                succes_count += 1
+                print(
+                    f"[INFO] Playlist {idx}/{total_playlists} terminée : {playlist_name} - {nouveaux_fichiers} nouveau(x) fichier(s).",
+                    flush=True
                 )
             except subprocess.CalledProcessError as e:
-                print(f"    [ERREUR] Échec du téléchargement pour {url}. Stderr: {e.stderr}")
+                print(f"[ERREUR] Playlist {idx}/{total_playlists} échouée : {playlist_name} (code {e.returncode}).", flush=True)
             except FileNotFoundError:
-                print("[ERREUR FATALE] La commande 'scdl' est introuvable. Assurez-vous qu'elle est installée et dans le PATH.")
+                print("[ERREUR FATALE] La commande 'scdl' est introuvable. Assurez-vous qu'elle est installée et dans le PATH.", flush=True)
                 return False
+
         self._rename_files()
-        print("[INFO] Téléchargement terminé.")
-        return True
+        print(f"[INFO] Téléchargement terminé. {succes_count}/{total_playlists} playlist(s) traitée(s) avec succès.", flush=True)
+        return succes_count > 0
 
 # ==============================================================================
 # CLASSE 2: MusicAnalyzer
